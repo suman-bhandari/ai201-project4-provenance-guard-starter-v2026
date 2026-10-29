@@ -42,63 +42,49 @@ Two things worth knowing before you pick numbers:
   a **miss**.
 
 ---
-## 1.
+## 1. False Positives on Plain Human Writing
 
-<!-- Your criterion. It must name a number. -->
-
+Across 3 separate runs of 10 plainly-written human samples, at most 1 sample per run scores $\ge 0.70$ ("Likely AI").
 
 
 **Why this target:**
-
-
+Falsely accusing a real writer destroys trust. Plain writing must default to the uncertain band rather than receiving an unearned high-confidence AI label.
 
 ---
 
-## 2.
+## 2. Score Separation Between Distinct Archetypes
 
-<!-- Your criterion. -->
-
-
+Across 5 clearly human texts and 5 raw AI texts, the mean composite score of the AI samples must exceed the human mean by at least 0.35.
 
 **Why this target:**
-
-
+If the two extremes score closely together, the system has no discriminatory power and the threshold boundaries become arbitrary.
 
 ---
 
-## 3.
+## 3. Label Reachability Across the Calibration Set
 
-<!-- Your criterion. -->
-
-
+Given 12 calibration inputs (4 clear human, 4 borderline, 4 clear AI), each of the three reader labels must be assigned to at least 2 samples.
 
 **Why this target:**
-
-
+Prevents the thresholds from collapsing into a binary decision or making the "Unsure" middle band so wide that no definitive labels ever get applied.
 
 ---
 
-## 4.
+## 4. Appeal Mutation and Persistence
 
-<!-- Your criterion. -->
-
-
+Every valid call to POST /api/v1/pushback must return HTTP 200/201 with a ticket_id, update the status to "review_pending", and log the event in 100% of cases.
 
 **Why this target:**
-
-
+Because detection is fallible by design, pushback is a core contract. A dropped or unrecorded appeal leaves the accused writer without recourse.
 
 ---
 
-## 5.
+## 5. Pathological Input Rejection
 
-<!-- Your criterion. -->
-
-
+Inputs that are empty, whitespace-only, shorter than 3 tokens, or longer than 50,000 characters must return HTTP 400 in 100% of cases without unhandled 500 exceptions.
 
 **Why this target:**
-
-
+Both underlying scoring modules crash on empty or undersized inputs; input validation must protect the service before expensive model inference runs.
 
 ---
 
