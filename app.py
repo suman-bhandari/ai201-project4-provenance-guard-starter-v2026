@@ -24,6 +24,7 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 
+from pydoc import text
 import uuid
 
 from flask import Flask, jsonify, request
@@ -200,8 +201,38 @@ def submit():
     a malformed input is one of the most common real failures there is.
     """
     payload = request.get_json(silent=True) or {}
+    text = payload.get("text")
+    creator_id = payload.get("creator_id", "unknown")
 
-    # TODO: delete this and build the route.
+    # Step 3 - one real signal that we first tested from the terminal
+    # python detector.py "some text"  # returns a number between 0 and 1
+    import detector
+    model_score = detector.model_signal(text)
+
+    # Step 2 - JSON goes in: pull text and creator_id out of the body
+    if not isinstance(text, str) or not text.strip():
+        return jsonify({"error": "bad_request", "message": "Send JSON with a non-empty \"text\"."}), 400
+
+    # Step 4 - log the decision. The content_id is what /appeal needs later.
+    content_id = f"c_{uuid.uuid4().hex[:12]}"
+    audit.log_decision(
+        content_id=content_id,
+        creator_id=creator_id,
+        model_score=model_score,
+        status="decided",
+    )
+    
+    # Step 1 - to get the route working without any logic
+    return jsonify({
+            "content_id": "hardcoded",
+            "creator_id": creator_id,
+            "guess": "unsure",
+            "confidence": model_score,
+            "label": "not built yet",
+            "model_score": model_score,
+            "style_score": None,
+        }), 200
+
     return jsonify({
         "error": "not_implemented",
         "message": "POST /submit isn't built yet — see the TODO in app.py.",

@@ -30,8 +30,10 @@ anything together:
     python stylometry.py "some text to look at"
 """
 
+from email.mime import text
 import re
 import statistics
+import string
 
 
 def sentences(text: str) -> list[str]:
@@ -64,8 +66,24 @@ def sentence_length_spread(text: str) -> float:
     `stdev` raises on fewer than two values. Decide what that should return
     before the attack set decides for you.
     """
-    # TODO: replace this
-    return 0.0
+    """
+    Measures the standard deviation of sentence lengths divided by the mean (coefficient of variation).
+    Higher values mean "more human" (greater variance in sentence length).
+    """
+    sents = sentences(text)
+    if len(sents) < 2:
+        # Edge case: A single sentence has no spread. Return 0 to prevent a division/stdev error.
+        return 0.0
+        
+    lengths = [len(words(s)) for s in sents]
+    mean_length = statistics.mean(lengths)
+    
+    if mean_length == 0:
+        return 0.0
+        
+    # Dividing by the mean ensures a text with long sentences isn't inherently 
+    # scored as having more spread than a text with short sentences.
+    return statistics.stdev(lengths) / mean_length
 
 
 def type_token_ratio(text: str) -> float:
@@ -80,8 +98,16 @@ def type_token_ratio(text: str) -> float:
     directly comparable on it, and if your test inputs vary a lot in length,
     that alone can look like a signal.
     """
-    # TODO: replace this
-    return 0.0
+    """
+    Calculates the ratio of unique words (types) to total words (tokens).
+    Returns a float between 0.0 and 1.0. Higher means "more human" (varied vocabulary).
+    """
+    all_words = words(text)
+    if not all_words:
+        return 0.0
+        
+    unique_words = set(all_words)
+    return len(unique_words) / len(all_words)
 
 
 def punctuation_density(text: str) -> float:
@@ -94,8 +120,20 @@ def punctuation_density(text: str) -> float:
         more interesting than full stops, because they vary more between
         writers.
     """
-    # TODO: replace this
-    return 0.0
+    """
+    Measures the frequency of punctuation marks relative to the total number of words.
+    Focuses on commas, semicolons, dashes, and colons as they indicate complex clause structures.
+    Higher generally means "more human".
+    """
+    all_words = words(text)
+    if not all_words:
+        return 0.0
+        
+    # Counting structurally interesting punctuation rather than periods.
+    target_punctuation = set(",;-:")
+    punct_count = sum(1 for char in text if char in target_punctuation)
+    
+    return punct_count / len(all_words)
 
 
 # ── Combining them ───────────────────────────────────────────────────────────
@@ -122,8 +160,30 @@ def style_signal(text: str) -> float:
     you trust it. Plain and ordinary, not formal: formal prose reads as *human*
     to signal one, and it is plain writing that gets accused.
     """
-    # TODO: replace this
-    return 0.5
+    """
+    The style signal as a 0–1 score. **Higher means more likely AI.**
+    
+    All three underlying metrics point in the same direction: higher raw values 
+    indicate more "human" lumpiness. Therefore, they must be inverted so that 
+    lower variance/density outputs a higher AI score.
+    """
+    spread = sentence_length_spread(text)
+    ttr = type_token_ratio(text)
+    punct = punctuation_density(text)
+    
+    # 1. Cap and normalize the metrics to a 0-1 scale so they combine fairly.
+    # (These thresholds are approximations and should be tuned during calibration).
+    norm_spread = min(spread / 0.8, 1.0)  # Human text often has a CV around 0.5-0.8
+    norm_ttr = min(ttr / 0.7, 1.0)        # TTR heavily depends on length, capped around 0.7
+    norm_punct = min(punct / 0.15, 1.0)   # 15% interesting punctuation is quite dense
+    
+    # 2. Average the normalized "humanity" scores.
+    human_score = (norm_spread + norm_ttr + norm_punct) / 3.0
+    
+    # 3. Invert the score so higher means more AI-ish, matching `detector.model_signal`.
+    ai_score = 1.0 - human_score
+    
+    return round(max(0.0, min(ai_score, 1.0)), 4)
 
 
 if __name__ == "__main__":
