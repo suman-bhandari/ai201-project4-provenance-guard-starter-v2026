@@ -86,8 +86,12 @@ It cannot comprehend meaning or context. Purely cosmetic edits that alter layout
      signals disagree? -->
 
 **The rule:**
+A weighted combination applying `config.WEIGHT_MODEL_SIGNAL` (0.65) to the language model output and `config.WEIGHT_STYLE_SIGNAL` (0.35) to the stylometry output. If the absolute difference between the two signals exceeds 0.40, the system treats the disagreement as structural uncertainty and averages the result with 0.50, pulling the composite score toward the "unsure" band.
 
 **The numbers:**
+- `WEIGHT_MODEL_SIGNAL`: 0.65
+- `WEIGHT_STYLE_SIGNAL`: 0.35
+- Disagreement threshold: `abs(model_score - style_score) > 0.40` pulls to `0.50`
 
 **Where it lives:** `scoring.py::combine_signals`
 
@@ -95,7 +99,7 @@ It cannot comprehend meaning or context. Purely cosmetic edits that alter layout
      somewhere else, say where. -->
 
 **A case where my two signals split, and what my rule does with it:**
-
+A writer using concise, plain vocabulary produces predictable phrasing that causes `model_score` to spike to 0.78, but their natural rhythm and irregular sentence structure yields a human-like `style_score` of 0.28. The spread is 0.50 (greater than the 0.40 threshold), which dampens the weighted base score (~0.605) down to ~0.553, keeping the text inside the "unsure" tier and preventing an outright false accusation.
 
 
 ---

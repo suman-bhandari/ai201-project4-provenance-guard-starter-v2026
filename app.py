@@ -32,6 +32,10 @@ from flask import Flask, jsonify, request
 import audit
 import config
 
+import detector
+import stylometry
+import scoring
+
 app = Flask(__name__)
 
 
@@ -206,15 +210,22 @@ def submit():
 
     # Step 2 - JSON goes in: pull text and creator_id out of the body
     if not isinstance(text, str) or not text.strip():
-        return jsonify({"error": "bad_request", "message": "Send JSON with a non-empty \"text\"."}), 400
+        return jsonify({
+            "error": "bad_request", 
+            "message": "Send JSON with a non-empty \"text\"."
+            }), 400
 
     # Step 3 - one real signal that we first tested from the terminal
     # python detector.py "some text"  # returns a number between 0 and 1
-    import detector
     try:
         model_score = detector.model_signal(text)
     except ValueError as exc:
         return jsonify({"error": "bad_request", "message": str(exc)}), 400
+
+    style_score = stylometry.style_signal(text)
+
+    # Combine signals
+    confidence = scoring.combine_signals(model_score, style_score)
 
     # Step 4 - log the decision. The content_id is what /appeal needs later.
     content_id = f"c_{uuid.uuid4().hex[:12]}"
@@ -222,6 +233,8 @@ def submit():
         content_id=content_id,
         creator_id=creator_id,
         model_score=model_score,
+        style_score=style_score,
+        combined_score=confidence,
         status="decided",
     )
     
@@ -230,10 +243,10 @@ def submit():
             "content_id": content_id,
             "creator_id": creator_id,
             "guess": "unsure",
-            "confidence": model_score,
+            "confidence": confidence,
             "label": "not built yet",
             "model_score": model_score,
-            "style_score": None,
+            "style_score": style_score,
         }), 200
 
 
