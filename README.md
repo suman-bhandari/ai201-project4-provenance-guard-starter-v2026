@@ -222,15 +222,15 @@ $ curl "http://127.0.0.1:5000/log?limit=3"
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* Fixing crashes during input validation on /submit when texts were empty or under 3 tokens.
+- *What came back:* An explanation that detector.py raises a ValueError on short text and a recommendation to order validation before the model call.
+- *What I changed:* Placed JSON and character checks ahead of signal execution and wrapped detector.model_signal in a try/except ValueError block.
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* Resolving a TypeError: log_appeal() got an unexpected keyword argument 'status' and AttributeError inside /appeal.
+- *What came back:* Correct syntax for string validation (isinstance(reasoning, str) and reasoning.strip()) and the exact argument signature for audit.log_appeal().
+- *What I changed:* Updated variable checks in app.py::appeal and passed creator_id, content_id, and reasoning directly without the redundant status parameter.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
