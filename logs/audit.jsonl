@@ -2,3 +2,4 @@
 {"timestamp": "2026-11-01T11:29:59+00:00", "content_id": "c_39583a80584f", "creator_id": "suman", "guess": null, "model_score": 0.8864, "style_score": 0.4714, "combined_score": 0.6206, "label": null, "status": "decided"}
 {"timestamp": "2026-11-01T11:39:21+00:00", "content_id": "c_d1785bd62bcc", "creator_id": "demo_instructor", "guess": null, "model_score": 0.7544, "style_score": 0.3738, "combined_score": 0.6212, "label": null, "status": "decided"}
 {"timestamp": "2026-11-01T11:43:28+00:00", "content_id": "c_9e61808b4a62", "creator_id": "demo_instructor", "guess": null, "model_score": 0.4445, "style_score": 0.1442, "combined_score": 0.3394, "label": null, "status": "decided"}
+{"timestamp": "2026-11-01T12:51:38+00:00", "content_id": "c_39583a80584f", "creator_id": "suman", "event": "appeal", "status": "under_review", "reasoning": "This is my personal reflective essay about my work routine; the plain phrasing is deliberate."}

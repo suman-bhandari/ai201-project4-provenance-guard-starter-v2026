@@ -39,13 +39,13 @@
 <!-- The path a submission takes, from arriving to the label a reader sees.
      Six or seven steps — this is the trace you wrote in Milestone 1. -->
 
-1. Ingestion: The client submits text and creator metadata via an HTTP POST request to `/submit`.
-2. Model Evaluation (Signal 1): The service passes the text to `detector.py` to calculate perplexity via a local language model, scoring predictable phrasing between 0.0 and 1.0.
-3. Stylometric Evaluation (Signal 2): The service passes the text to `stylometry.py` to evaluate structural surface features (sentence length variation, unique word ratio, and punctuation density).
-4. Signal Aggregation: `scoring.combine_signals()` calculates a weighted composite confidence score from both signals.
-5. Threshold Mapping: `scoring.score_to_label()` categorizes the composite score into one of three bands (human, unsure, or AI).
-6. Label Generation: The system maps the band to reader-facing text designed to inform readers without falsely accusing real writers.
-7. Delivery & Audit Logging: The response returns the decision, scores, and an appeal path to the client while writing an immutable record to `logs/audit.jsonl`.
+1. Submission Ingestion: The client sends a raw text payload and an optional `creator_id` to `POST /submit`.
+2. Signal 1 (Language Model Evaluation): The text is evaluated by `detector.py`, measuring predictability (perplexity) against a local language model and outputting an AI score from 0.0 to 1.0.
+3. Signal 2 (Stylometric Evaluation): The text is analyzed structurally by `stylometry.py`, measuring sentence length variance, type-token ratio, and clause punctuation density, outputting an AI score from 0.0 to 1.0.
+4. Signal Aggregation: `scoring.py::combine_signals` combines both scores via a weighted average and applies a disagreement dampener if the two signals conflict.
+5. Threshold Categorization: `scoring.py::score_to_label` classifies the combined score into one of three ranges: human, unsure, or AI.
+6. Reader-Facing Label Assignment: Plain-English text is generated to communicate the finding clearly without accusing authentic writers.
+7. Audit Logging & Response: The complete decision and both signal scores are recorded to `logs/audit.jsonl`, and an actionable JSON payload with an appeal pathway is returned to the client.
 
 
 ---
@@ -113,16 +113,16 @@ A writer using concise, plain vocabulary produces predictable phrasing that caus
 
 | Label | Score range | The exact text a reader sees |
 |---|---|---|
-| high-confidence human |  |  |
-| unsure |  |  |
-| high-confidence AI |  |  |
+| high-confidence human | 0.00 – 0.35 | We think this was written by a person. |
+| unsure | 0.35 – 0.65 | We can't tell for sure who wrote this — it shares characteristics of both human and automated writing. |
+| high-confidence AI | 0.65 – 1.00 | This text closely follows statistical patterns typical of automated writing. |
 
 **Why I worded the "unsure" one this way:**
 <!-- It's the hardest of the three. It has to admit uncertainty without
      sounding like an accusation, because the person reading it may well have
      written every word themselves. -->
 
-
+The "unsure" label must admit system limitations without implying guilt. Accusing a genuine writer of dishonesty causes harm, but treating simple or non-native phrasing as inherently artificial is equally unfair. Framing the label neutrally ("it shares characteristics of both") informs readers while avoiding an accusatory tone toward human writers.
 
 ---
 
@@ -141,10 +141,22 @@ A writer using concise, plain vocabulary produces predictable phrasing that caus
 ```bash
 $ curl -X POST http://127.0.0.1:5000/submit \
   -H "Content-Type: application/json" \
-  -d '{"text": "...", "creator_id": "..."}'
-```
+  -d '{
+    "text": "The implementation of the proposed framework requires careful consideration of several key factors. First, it is important to note that the system must be able to handle a wide variety of different inputs. Additionally, the overall performance of the solution depends on a number of important variables.",
+    "creator_id": "suman"
+  }'
+  ```
 
 ```json
+{
+  "confidence": 0.6206,
+  "content_id": "c_39583a80584f",
+  "creator_id": "suman",
+  "guess": "unsure",
+  "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+  "model_score": 0.8864,
+  "style_score": 0.4714
+}
 
 ```
 
@@ -153,10 +165,20 @@ $ curl -X POST http://127.0.0.1:5000/submit \
 ```bash
 $ curl -X POST http://127.0.0.1:5000/appeal \
   -H "Content-Type: application/json" \
-  -d '{"content_id": "...", "reasoning": "..."}'
+  -d '{
+    "content_id": "c_39583a80584f",
+    "creator_id": "suman",
+    "reasoning": "This is my personal reflective essay about my work routine; the plain phrasing is deliberate."
+  }'
 ```
 
 ```json
+{
+  "content_id": "c_39583a80584f",
+  "message": "Appeal recorded and queued for review.",
+  "ok": true,
+  "status": "under_review"
+}
 
 ```
 
@@ -167,6 +189,30 @@ $ curl "http://127.0.0.1:5000/log?limit=3"
 ```
 
 ```json
+{
+  "count": 2,
+  "entries": [
+    {
+      "combined_score": 0.6206,
+      "content_id": "c_39583a80584f",
+      "creator_id": "suman",
+      "guess": "unsure",
+      "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+      "model_score": 0.8864,
+      "status": "decided",
+      "style_score": 0.4714,
+      "timestamp": "2026-11-01T11:29:59+00:00"
+    },
+    {
+      "content_id": "c_39583a80584f",
+      "creator_id": "suman",
+      "event": "appeal",
+      "reasoning": "This is my personal reflective essay about my work routine; the plain phrasing is deliberate.",
+      "status": "under_review",
+      "timestamp": "2026-11-01T12:51:38+00:00"
+    }
+  ]
+}
 
 ```
 

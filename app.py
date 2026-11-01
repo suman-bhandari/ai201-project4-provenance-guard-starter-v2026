@@ -226,12 +226,15 @@ def submit():
 
     # Combine signals
     confidence = scoring.combine_signals(model_score, style_score)
+    guess, label_text = scoring.score_to_label(confidence)
 
     # Step 4 - log the decision. The content_id is what /appeal needs later.
     content_id = f"c_{uuid.uuid4().hex[:12]}"
     audit.log_decision(
         content_id=content_id,
         creator_id=creator_id,
+        guess=guess,
+        label=label_text,
         model_score=model_score,
         style_score=style_score,
         combined_score=confidence,
@@ -242,9 +245,9 @@ def submit():
     return jsonify({
             "content_id": content_id,
             "creator_id": creator_id,
-            "guess": "unsure",
+            "guess": guess,
             "confidence": confidence,
-            "label": "not built yet",
+            "label": label_text,
             "model_score": model_score,
             "style_score": style_score,
         }), 200
@@ -271,13 +274,34 @@ def appeal():
     wrong accusation and nothing at all.
     """
     payload = request.get_json(silent=True) or {}
+    content_id = payload.get("content_id")
+    reasoning = payload.get("reasoning")
+    creator_id = payload.get("creator_id", "unknown")
 
-    # TODO: delete this and build the route.
+    if not isinstance(content_id, str) or not content_id.strip():
+        return jsonify({
+            "error": "bad_request",
+            "message": "Send JSON with a valid 'content_id'."
+        }), 400
+
+    if not isinstance(reasoning, str) or not reasoning.strip():
+        return jsonify({
+            "error": "bad_request",
+            "message": "Please provide your reasoning for the appeal."
+        }), 400
+
+    audit.log_appeal(
+        content_id=content_id,
+        creator_id=creator_id,
+        reasoning=reasoning,
+    )
+
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /appeal isn't built yet — see the TODO in app.py.",
-        "you_sent": payload,
-    }), 501
+        "ok": True,
+        "content_id": content_id,
+        "status": "under_review",
+        "message": "Appeal recorded and queued for review.",
+    }), 200
 
 
 # ── Already works ─────────────────────────────────────────────────────────────
