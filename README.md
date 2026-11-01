@@ -39,6 +39,13 @@
 <!-- The path a submission takes, from arriving to the label a reader sees.
      Six or seven steps — this is the trace you wrote in Milestone 1. -->
 
+1. Ingestion: The client submits text and creator metadata via an HTTP POST request to `/submit`.
+2. Model Evaluation (Signal 1): The service passes the text to `detector.py` to calculate perplexity via a local language model, scoring predictable phrasing between 0.0 and 1.0.
+3. Stylometric Evaluation (Signal 2): The service passes the text to `stylometry.py` to evaluate structural surface features (sentence length variation, unique word ratio, and punctuation density).
+4. Signal Aggregation: `scoring.combine_signals()` calculates a weighted composite confidence score from both signals.
+5. Threshold Mapping: `scoring.score_to_label()` categorizes the composite score into one of three bands (human, unsure, or AI).
+6. Label Generation: The system maps the band to reader-facing text designed to inform readers without falsely accusing real writers.
+7. Delivery & Audit Logging: The response returns the decision, scores, and an appeal path to the client while writing an immutable record to `logs/audit.jsonl`.
 
 
 ---
@@ -54,18 +61,24 @@
 ### Signal one — the model signal
 
 **What it measures:**
+Text predictability, quantified as perplexity using a local causal language model.
 
 **Why that might differ between human and AI writing:**
+AI models produce text by repeatedly selecting statistically likely next tokens, resulting in uniformly low perplexity. Human writing tends to wander, featuring idiosyncratic phrasing, abrupt syntactic shifts, and domain-specific terminology that surprises the model.
 
 **What it can't see:**
+It cannot distinguish between machine generation and plain, direct human writing. Writers using simple vocabulary or short sentences—such as non-native English speakers or younger students—register as predictable and receive falsely elevated AI scores. Ornate, rare-word-heavy AI text can slip through as human.
 
 ### Signal two — the style signal
 
 **What it measures:**
+The physical shape and statistical variety of the text as raw text (sentence length variance, vocabulary repetition, and clause punctuation).
 
 **Why that might differ between human and AI writing:**
+AI models drift toward uniform sentence lengths and consistent vocabulary frequencies. Human writing is structural "lumpier," placing three-word sentences next to forty-word compound sentences.
 
 **What it can't see:**
+It cannot comprehend meaning or context. Purely cosmetic edits that alter layout without changing substance—such as splitting sentences with arbitrary full stops, injecting typos, or inserting block quotes—completely distort its measurements.
 
 ### The combining rule
 

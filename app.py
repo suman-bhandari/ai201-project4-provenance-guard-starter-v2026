@@ -204,14 +204,17 @@ def submit():
     text = payload.get("text")
     creator_id = payload.get("creator_id", "unknown")
 
-    # Step 3 - one real signal that we first tested from the terminal
-    # python detector.py "some text"  # returns a number between 0 and 1
-    import detector
-    model_score = detector.model_signal(text)
-
     # Step 2 - JSON goes in: pull text and creator_id out of the body
     if not isinstance(text, str) or not text.strip():
         return jsonify({"error": "bad_request", "message": "Send JSON with a non-empty \"text\"."}), 400
+
+    # Step 3 - one real signal that we first tested from the terminal
+    # python detector.py "some text"  # returns a number between 0 and 1
+    import detector
+    try:
+        model_score = detector.model_signal(text)
+    except ValueError as exc:
+        return jsonify({"error": "bad_request", "message": str(exc)}), 400
 
     # Step 4 - log the decision. The content_id is what /appeal needs later.
     content_id = f"c_{uuid.uuid4().hex[:12]}"
@@ -224,7 +227,7 @@ def submit():
     
     # Step 1 - to get the route working without any logic
     return jsonify({
-            "content_id": "hardcoded",
+            "content_id": content_id,
             "creator_id": creator_id,
             "guess": "unsure",
             "confidence": model_score,
@@ -232,15 +235,6 @@ def submit():
             "model_score": model_score,
             "style_score": None,
         }), 200
-
-    return jsonify({
-        "error": "not_implemented",
-        "message": "POST /submit isn't built yet — see the TODO in app.py.",
-        "you_sent": {
-            "text_length": len(payload.get("text", "")),
-            "creator_id": payload.get("creator_id"),
-        },
-    }), 501
 
 
 @app.post("/appeal")
