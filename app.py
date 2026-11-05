@@ -156,7 +156,7 @@ def health():
 # ── YOU BUILD THIS ────────────────────────────────────────────────────────────
 
 @app.post("/submit")
-# @limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
+@limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
 def submit():
     """
     Take a piece of text, decide about it, log the decision, answer.
@@ -210,16 +210,24 @@ def submit():
 
     # Step 2 - JSON goes in: pull text and creator_id out of the body
     if not isinstance(text, str) or not text.strip():
+        audit.log_rejection(
+            creator_id=creator_id,
+            reason="missing_or_empty_text",
+        )
         return jsonify({
             "error": "bad_request", 
-            "message": "Send JSON with a non-empty \"text\"."
-            }), 400
+            "message": "Send JSON with a non-empty 'text'."
+        }), 400
 
     # Step 3 - one real signal that we first tested from the terminal
     # python detector.py "some text"  # returns a number between 0 and 1
     try:
         model_score = detector.model_signal(text)
     except ValueError as exc:
+        audit.log_rejection(
+            creator_id=creator_id,
+            reason=str(exc),
+        )
         return jsonify({"error": "bad_request", "message": str(exc)}), 400
 
     style_score = stylometry.style_signal(text)

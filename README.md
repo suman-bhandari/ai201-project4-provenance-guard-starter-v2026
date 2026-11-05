@@ -238,7 +238,7 @@ $ curl "http://127.0.0.1:5000/log?limit=3"
 
 ## Rate Limiting
 
-**My limits:** ___ per minute, ___ per day
+**My limits:** 5 per minute, 50 per day
 
 **Why those numbers and not others:**
 <!-- Think about two people: a real writer submitting their own work a few
@@ -246,15 +246,20 @@ $ curl "http://127.0.0.1:5000/log?limit=3"
      thresholds. Your numbers have to be liveable for the first and hostile to
      the second. -->
 
+     A genuine writer composing or revising poems or essays will rarely submit more than 2 or 3 times in a single minute. In contrast, an attacker attempting to probe the scoring boundaries or reverse-engineer the detector thresholds requires dozens of iterations. A limit of 5/minute provides a smooth human experience while rendering rapid automated sweeps impossible.
+
 **What a caller counts as:** <!-- per address, or per creator_id? They fail
 differently — one script can look like a thousand callers, and one household
 can look like one. -->
+
+Per `creator_id` (or IP address depending on limiter key config).
 
 **The run of status codes when I pushed past it:**
 
 <!-- python run_attacks.py --flood 15 -->
 
 ```
+200 200 200 200 200 429 429 429 429 429 429 429 429 429 429
 
 ```
 
