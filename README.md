@@ -456,17 +456,108 @@ Because the author wrote in a second language, they deliberately relied on clear
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. False positives on plain human writing | <= 1 in 10 flagged as AI (score >= 0.70) | 3/10 labeled AI (1 with score >= 0.70) | 3/10 labeled AI (1 with score >= 0.70) | 3/10 labeled AI (1 with score >= 0.70) | MISSED |
+| 2. Score separation between distinct archetypes | Mean gap between AI and human >= 0.35 | Gap: 0.1914 (Human: 0.2957, AI: 0.4871) | Gap: 0.1914 (Human: 0.2957, AI: 0.4871) | 0/5 AI (Tripped 429 rate limit) | MISSED |
+| 3. Label reachability across calibration set | >= 2 samples in each of all 3 labels | 2 of 3 (Human: 2, Unsure: 10, AI: 0) | 2 of 3 (Human: 2, Unsure: 10, AI: 0) | 2 of 3 (Human: 2, Unsure: 10, AI: 0) | MISSED |
+| 4. Appeal mutation and persistence | 100% (5 of 5) succeed and mutate status | 5/5 returned 200 | 5/5 returned 200 | 5/5 returned 200 | MET |
+| 5. Pathological input rejection | 100% (6 of 6) return 400 Bad Request | 5/6 returned 400 (huge text returned 200) | 5/6 returned 400 (huge text returned 200) | 5/6 returned 400 (huge text returned 200) | MISSED |
 
 **Real output from one trial**, pasted as text, naming the file and function
 that produced it:
 
 ```json
-
+[
+  {
+    "status": 200,
+    "guess": "ai",
+    "confidence": 0.6961,
+    "model_score": 0.7658,
+    "style_score": 0.5666,
+    "label": "This text closely follows statistical patterns typical of automated writing.",
+    "sent": "I walked to the grocery store early this morning to pick up some bread"
+  },
+  {
+    "status": 200,
+    "guess": "ai",
+    "confidence": 0.6661,
+    "model_score": 0.7375,
+    "style_score": 0.5336,
+    "label": "This text closely follows statistical patterns typical of automated writing.",
+    "sent": "My sister called yesterday to tell me about her new apartment downtown"
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4615,
+    "model_score": 0.5636,
+    "style_score": 0.272,
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "sent": "Cooking dinner at home takes more planning than ordering takeout, but "
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5501,
+    "model_score": 0.6181,
+    "style_score": 0.4239,
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "sent": "We spent the afternoon fixing the wooden fence in the backyard. Two of"
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3717,
+    "model_score": 0.2481,
+    "style_score": 0.6012,
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "sent": "Learning a second language as an adult requires patience and daily rep"
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4988,
+    "model_score": 0.4958,
+    "style_score": 0.5043,
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "sent": "The library down the street is one of my favorite places to study on w"
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5197,
+    "model_score": 0.4405,
+    "style_score": 0.6667,
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "sent": "Our train was delayed by forty minutes due to track maintenance near t"
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4555,
+    "model_score": 0.4638,
+    "style_score": 0.44,
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "sent": "I decided to clean out my desk drawers after realizing I could never f"
+  },
+  {
+    "status": 200,
+    "guess": "human",
+    "confidence": 0.3072,
+    "model_score": 0.3359,
+    "style_score": 0.254,
+    "label": "We think this was written by a person.",
+    "sent": "Taking care of house plants seemed difficult at first, but remembering"
+  },
+  {
+    "status": 200,
+    "guess": "ai",
+    "confidence": 0.7062,
+    "model_score": 0.8149,
+    "style_score": 0.5043,
+    "label": "This text closely follows statistical patterns typical of automated writing.",
+    "sent": "After finishing my homework, I went for a quick run around the park be"
+  }
+]
 ```
 
 **Diagnoses**
@@ -485,7 +576,53 @@ that produced it:
 
      Look for a pattern. Five failures on one signal is one problem, not five. -->
 
+### 1. Diagnoses for Criterion Misses
 
+* **Criterion 1 (False Positives on Plain Human Writing — MISSED: 3/10 labeled AI):**
+  * **Stage:** Signal one (`detector.py`) and The label mapping (`config.py::AI_THRESHOLD`).
+  * **Mechanism:** Plain, everyday prose ("I walked to the grocery store...", "My sister called yesterday...") uses highly frequent, common vocabulary and standard SVO sentence patterns. Language model perplexity on these sentences is low, causing signal one to output high AI scores (0.7375–0.8149)[cite: 7]. Because the combining rule weights signal one at 0.65[cite: 5], and the AI label threshold is set at 0.65, any moderate style score pulls the final confidence into the 0.66–0.70 range, resulting in a false "ai" classification[cite: 5, 7].
+
+* **Criterion 2 (Score Separation Between Archetypes — MISSED: Gap of 0.1914 vs target 0.35, and Run 3 429):**
+  * **Stage:** Signal two (`stylometry.py`) and The route (`app.py::submit` rate limiter).
+  * **Mechanism (Scoring):** The raw AI texts used standard academic/business templates[cite: 7]. While signal one correctly identified them as somewhat predictable (~0.49), signal two penalized uniform structure insufficiently (style scores around 0.31–0.52)[cite: 7]. This dragged the AI average down to 0.4871, failing to achieve the required 0.35 gap above the human average of 0.2957[cite: 7].
+  * **Mechanism (Run 3 Failure):** In Trial 3, the scenario executed rapid repeated calls under the same default creator ID without a delay, exhausting the 5-requests-per-minute bucket and resulting in HTTP 429 rejections for all 5 samples[cite: 7].
+
+* **Criterion 3 (Label Reachability — MISSED: 0 of 12 samples reached "ai"):**
+  * **Stage:** The combining rule (`scoring.py::combine_signals`) and The label mapping (`config.py`).
+  * **Mechanism:** All 12 calibration samples clustered between 0.33 and 0.62 in composite score[cite: 7]. The disagreement dampener pulls any score where signals differ by > 0.40 directly toward 0.50[cite: 5]. Because signal one and signal two frequently diverged on borderline and structured AI texts (e.g., model score 0.8810 vs style score 0.4743)[cite: 7], the dampener actively compressed scores into the "unsure" band, preventing any sample from reaching the 0.65 AI threshold[cite: 5, 7].
+
+* **Criterion 5 (Pathological Input Rejection — MISSED: 5/6 returned 400, 1 returned 200):**
+  * **Stage:** The route (`app.py::submit`).
+  * **Mechanism:** The test case `{"text": "word " * 15000}` submitted an enormous 75,000-character payload[cite: 7]. While the endpoint validates type and non-emptiness, it lacks an upper bound character limit check (e.g., `len(text) > 50000`). The route accepted the payload, truncated tokens downstream, and returned HTTP 200 with score 0.9984 instead of rejecting it with HTTP 400 Bad Request[cite: 1, 7].
+
+---
+
+### 2. Diagnoses for Broken Attacks
+
+* **Attack RQ07 (Body is a JSON array `[]`, returned HTTP 500):**
+  * **Stage:** The route (`app.py::submit`).
+  * **Mechanism:** The route extracts JSON using `payload = request.get_json(silent=True) or {}`. When the request body is a JSON array (`[]`), `payload` evaluates to a Python `list`. Subsequent code calls `payload.get("text")`, triggering an unhandled `AttributeError: 'list' object has no attribute 'get'` and crashing Flask with a 500 server error[cite: 6].
+
+* **Attack EV01 (Evasion via typos, scored 0.280 as human):**
+  * **Stage:** Signal two (`stylometry.py::type_token_ratio`).
+  * **Mechanism:** The attacker injected random typographical errors into AI-generated text[cite: 6]. `type_token_ratio` counts unique word tokens[cite: 2]. Because misspelled words are treated as unique vocabulary tokens, lexical variety artificially inflated, lowering the style AI score to 0.4951[cite: 6]. Simultaneously, rare misspellings increased model perplexity (lowering model score to 0.1635)[cite: 1, 6], evading detection completely[cite: 6].
+
+* **Attacks FP02, FP03, FP04, FP05 (False positives on formal/non-native human prose):**
+  * **Stage:** Signal one (`detector.py`) and The combining rule (`scoring.py`).
+  * **Mechanism:** All four texts used standard grammatical conventions, clear vocabulary, or rigid rubric formats[cite: 6]. Signal one registered low perplexity and returned scores between 0.73 and 0.83[cite: 6]. Because signal two did not score low enough to create a > 0.40 divergence gap, the dampener did not engage, leaving combined scores at 0.66–0.71 (classifying real writers as AI)[cite: 5, 6].
+
+* **Attack PI02 (Prompt injection disguised as system prompt, scored 0.237 as human):**
+  * **Stage:** Signal one (`detector.py`).
+  * **Mechanism:** Signal one has no awareness of instruction semantics vs prose[cite: 1]. The prompt injection syntax contained odd token transitions and meta-instructions that language model pre-training rarely sees in natural paragraphs, resulting in high perplexity and a falsely low AI score of 0.2044[cite: 1, 6].
+
+---
+
+### 3. Global Pattern Across Misses
+
+The overarching structural failure across both the attack run and the criteria evaluation is **asymmetric vulnerability to vocabulary predictability**:
+1. Plain and structured human writing is consistently over-penalized by Signal One's perplexity metric[cite: 1, 6, 7].
+2. The combining rule's 0.65 model weight dominates the composite score, allowing Signal One to push plain human writing over the 0.65 AI threshold into false accusations[cite: 5, 6, 7].
+3. Conversely, cosmetic perturbations (typos or structural variance) easily trick Signal Two into registering high humanity, pulling genuine AI text down into evasion[cite: 2, 6].
 
 ---
 
