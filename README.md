@@ -269,7 +269,64 @@ Per `creator_id` (or IP address depending on limiter key config).
 
 <!-- Every attack with its outcome and a held-or-broke mark.
      `run_attacks.py --label before` produces the table. -->
-
+| ID | Family | Targeting | Status | Content ID | Guess | Score | Verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| EV01 | evasion | signal two: typos raise word variety | 200 | `c_97695524c8f0` | human | 0.280 | BROKE |
+| EV02 | evasion | signal two: broken-up sentences raise length spread | 200 | `c_7c3852db57a3` | unsure | 0.494 | HELD |
+| EV03 | evasion | signal two: a pasted quotation changes the shape | 200 | `c_4bedaa7b2c0c` | unsure | 0.565 | HELD |
+| EV04 | evasion | signal one: unusual words raise perplexity | 200 | `c_3e89407a3a92` | unsure | 0.560 | HELD |
+| EV05 | evasion | both signals: heavy human editing pass | 200 | `c_ee2d2f3c2e94` | human | 0.287 | BROKE |
+| EV06 | evasion | signal two: one very long sentence and one very short | 200 | `c_aafac0d327fe` | unsure | 0.464 | HELD |
+| EV07 | evasion | signal two: padding with punctuation | 200 | `c_3218252448cf` | unsure | 0.498 | HELD |
+| EV08 | evasion | signal one: text below the token window | 200 | `c_b28b8ba22b0e` | unsure | 0.351 | HELD |
+| EV09 | evasion | both: AI text with a human opening paragraph bolted on | 200 | `c_23a19c744ad8` | unsure | 0.581 | HELD |
+| EV10 | evasion | signal two: repeated stanza structure | 200 | `c_bba3b5e12656` | ai | 0.876 | HELD |
+| FP01 | false_positive | plain, clear human writing with no flourishes | 200 | `c_a2807d6356c4` | unsure | 0.553 | HELD |
+| FP02 | false_positive | human writing in a formal register | 200 | `c_993fb5cfd3f4` | ai | 0.668 | BROKE |
+| FP03 | false_positive | a non-native English speaker writing carefully | 200 | `c_2aebb4b78095` | ai | 0.709 | BROKE |
+| FP04 | false_positive | a student essay written to a rubric | 200 | `c_4d0b7ef94550` | ai | 0.710 | BROKE |
+| FP05 | false_positive | technical documentation written by a person | 200 | `c_910817f0806f` | ai | 0.710 | BROKE |
+| FP06 | false_positive | a person imitating a formal template | 200 | `c_a1624ee15a95` | unsure | 0.609 | HELD |
+| FP07 | false_positive | human writing that repeats a phrase deliberately | 200 | `c_dfa5e5710bc1` | unsure | 0.607 | HELD |
+| FP08 | false_positive | very short genuine human submission | 200 | `c_cc9bb7c1281a` | unsure | 0.380 | HELD |
+| PI01 | prompt_injection | instruction to ignore the check | 200 | `c_fd47501fb625` | unsure | 0.437 | HELD |
+| PI02 | prompt_injection | instruction disguised as a system message | 200 | `c_faad7abe89bd` | human | 0.237 | BROKE |
+| PI03 | prompt_injection | instruction wrapped in the writer's voice | 200 | `c_8df67c3cbfb0` | unsure | 0.555 | HELD |
+| PI04 | prompt_injection | attempt to make the label text hostile | 200 | `c_24b424ddd11c` | unsure | 0.470 | HELD |
+| PI05 | prompt_injection | attempt to inject into the audit log | 200 | `c_badc7fdb716b` | unsure | 0.482 | HELD |
+| PI06 | prompt_injection | instruction plus real human text | 200 | `c_c622f7fdea92` | unsure | 0.517 | HELD |
+| MF01 | malformed | text is only whitespace | 400 | `—` | — | — | HELD |
+| MF02 | malformed | text is a single character | 400 | `—` | — | — | HELD |
+| MF03 | malformed | text is control characters | 200 | `c_b83c9e6cadbc` | unsure | 0.367 | HELD |
+| MF04 | malformed | text is only punctuation | 200 | `c_481b626a1486` | unsure | 0.429 | HELD |
+| MF05 | malformed | text is a very long single word | 200 | `c_7231e98ffdcd` | ai | 0.882 | HELD |
+| MF06 | malformed | text is emoji only | 200 | `c_a00045d307b4` | ai | 0.998 | HELD |
+| MF07 | malformed | text is right-to-left script | 200 | `c_c5a6cecbe56b` | ai | 0.939 | HELD |
+| MF08 | malformed | text is 60,000 characters | 200 | `c_9393811166ba` | ai | 0.913 | HELD |
+| RQ01 | malformed | no text field at all | 400 | `—` | — | — | HELD |
+| RQ02 | malformed | no creator_id | 200 | `c_6abac077e42b` | unsure | 0.445 | HELD |
+| RQ03 | malformed | text is a number | 400 | `—` | — | — | HELD |
+| RQ04 | malformed | text is a list | 400 | `—` | — | — | HELD |
+| RQ05 | malformed | text is null | 400 | `—` | — | — | HELD |
+| RQ06 | malformed | creator_id is an object | 200 | `c_f1c368c3f781` | unsure | 0.383 | HELD |
+| RQ07 | malformed | body is a JSON array, not an object | 500 | `—` | — | — | BROKE |
+| RQ08 | malformed | body is unparseable JSON | 400 | `—` | — | — | HELD |
+| RQ09 | malformed | body is empty | 400 | `—` | — | — | HELD |
+| RQ10 | malformed | body is form-encoded, not JSON | 429 | `—` | — | — | HELD |
+| RQ11 | malformed | body is JSON claiming to be plain text | 429 | `—` | — | — | HELD |
+| RQ12 | malformed | deeply nested JSON | 400 | `—` | — | — | HELD |
+| FL01_01 | flood_same_creator | 20 rapid submissions from one creator | 200 | `c_69e241f90b1e` | unsure | 0.376 | HELD |
+| FL01_02 | flood_same_creator | 20 rapid submissions from one creator | 200 | `c_0bb6f4744080` | unsure | 0.376 | HELD |
+| FL01_03 | flood_same_creator | 20 rapid submissions from one creator | 200 | `c_b8061f4af5d6` | unsure | 0.376 | HELD |
+| FL01_04 | flood_same_creator | 20 rapid submissions from one creator | 200 | `c_df514bd19e56` | unsure | 0.376 | HELD |
+| FL01_05 | flood_same_creator | 20 rapid submissions from one creator | 200 | `c_3d5e3c148ede` | unsure | 0.376 | HELD |
+| FL01_06 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
+| FL01_07 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
+| FL01_08 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
+| FL01_09 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
+| FL01_10 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
+| FL01_11 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
+| FL01_12 | flood_same_creator | 20 rapid submissions from one creator | 429 | `—` | — | — | HELD |
 
 
 **Ten audit log entries from the run**
@@ -277,12 +334,118 @@ Per `creator_id` (or IP address depending on limiter key config).
 <!-- Choose entries that show the interesting failures, not the ten easiest. -->
 
 ```json
+[
+  {
+    "timestamp": "2026-11-05T08:11:02+00:00",
+    "creator_id": "attacker_FL01",
+    "event": "rejection",
+    "reason": "rate_limit_exceeded",
+    "status": 429
+  },
+  {
+    "timestamp": "2026-11-05T08:11:05+00:00",
+    "creator_id": "attacker_MF01",
+    "event": "rejection",
+    "reason": "missing_or_empty_text",
+    "status": 400
+  },
+  {
+    "timestamp": "2026-11-05T08:11:10+00:00",
+    "content_id": "c_2aebb4b78095",
+    "creator_id": "attacker_FP03",
+    "guess": "ai",
+    "label": "This text closely follows statistical patterns typical of automated writing.",
+    "model_score": 0.8051,
+    "style_score": 0.5299,
+    "combined_score": 0.7088,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:12+00:00",
+    "content_id": "c_4d0b7ef94550",
+    "creator_id": "attacker_FP04",
+    "guess": "ai",
+    "label": "This text closely follows statistical patterns typical of automated writing.",
+    "model_score": 0.8329,
+    "style_score": 0.4812,
+    "combined_score": 0.7098,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:15+00:00",
+    "content_id": "c_910817f0806f",
+    "creator_id": "attacker_FP05",
+    "guess": "ai",
+    "label": "This text closely follows statistical patterns typical of automated writing.",
+    "model_score": 0.8005,
+    "style_score": 0.5422,
+    "combined_score": 0.7101,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:18+00:00",
+    "content_id": "c_97695524c8f0",
+    "creator_id": "attacker_EV01",
+    "guess": "human",
+    "label": "We think this was written by a person.",
+    "model_score": 0.1635,
+    "style_score": 0.4951,
+    "combined_score": 0.2796,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:21+00:00",
+    "content_id": "c_ee2d2f3c2e94",
+    "creator_id": "attacker_EV05",
+    "guess": "human",
+    "label": "We think this was written by a person.",
+    "model_score": 0.3212,
+    "style_score": 0.2227,
+    "combined_score": 0.2867,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:25+00:00",
+    "content_id": "c_a1624ee15a95",
+    "creator_id": "attacker_FP06",
+    "guess": "unsure",
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "model_score": 0.8814,
+    "style_score": 0.4156,
+    "combined_score": 0.6092,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:28+00:00",
+    "content_id": "c_badc7fdb716b",
+    "creator_id": "attacker_PI05",
+    "guess": "unsure",
+    "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+    "model_score": 0.6401,
+    "style_score": 0.1369,
+    "combined_score": 0.4820,
+    "status": "decided"
+  },
+  {
+    "timestamp": "2026-11-05T08:11:32+00:00",
+    "content_id": "c_faad7abe89bd",
+    "creator_id": "attacker_PI02",
+    "guess": "human",
+    "label": "We think this was written by a person.",
+    "model_score": 0.2044,
+    "style_score": 0.2963,
+    "combined_score": 0.2366,
+    "status": "decided"
+  }
+]
 
 ```
 
 **The single worst outcome** — the one I'd least want to explain to a writer
 whose work got caught by it:
-
+Attack FP03 (Content ID: c_2aebb4b78095) — A non-native English speaker writing carefully.
+The service returned a composite score of 0.7088 and assigned the highest-severity classification: "ai" ("This text closely follows statistical patterns typical of automated writing.").
+Because the author wrote in a second language, they deliberately relied on clear, conservative vocabulary and standard sentence structures. Signal one penalized this predictability with a high AI score of 0.8051. Because signal two also registered moderate uniformity (0.5299), the score was not divergent enough to trigger the disagreement dampener. The service issued an unearned accusation of academic dishonesty to an authentic writer who took extra care to write cleanly. Accusing an earnest student or non-native speaker of cheating destroys community trust and directly exemplifies the structural bias of perplexity-based detection.
 
 
 ---
