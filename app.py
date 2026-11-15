@@ -35,6 +35,7 @@ import config
 import detector
 import stylometry
 import scoring
+import time
 
 app = Flask(__name__)
 
@@ -204,6 +205,8 @@ def submit():
     what should this do when `text` is missing, empty, or enormous? A crash on
     a malformed input is one of the most common real failures there is.
     """
+    req_start = time.perf_counter()
+
     payload = request.get_json(silent=True) or {}
     text = payload.get("text")
     creator_id = payload.get("creator_id", "unknown")
@@ -219,8 +222,8 @@ def submit():
             "message": "Send JSON with a non-empty 'text'."
         }), 400
 
-    # Step 3 - one real signal that we first tested from the terminal
-    # python detector.py "some text"  # returns a number between 0 and 1
+    # Step 3 - Time Signal 1 (Model Perplexity)
+    t_model_start = time.perf_counter()
     try:
         model_score = detector.model_signal(text)
     except ValueError as exc:
@@ -229,14 +232,33 @@ def submit():
             reason=str(exc),
         )
         return jsonify({"error": "bad_request", "message": str(exc)}), 400
+    model_latency_ms = round((time.perf_counter() - t_model_start) * 1000.0, 2)
 
+    # Time Signal 2 (Stylometry)
+    t_style_start = time.perf_counter()
     style_score = stylometry.style_signal(text)
+    style_latency_ms = round((time.perf_counter() - t_style_start) * 1000.0, 2)
 
     # Combine signals
     confidence = scoring.combine_signals(model_score, style_score)
     guess, label_text = scoring.score_to_label(confidence)
 
-    # Step 4 - log the decision. The content_id is what /appeal needs later.
+    # Compute LLMOps Telemetry (Latency, Tokens, Throughput, Cost)
+    total_latency_ms = round((time.perf_counter() - req_start) * 1000.0, 2)
+    token_count = detector.count_tokens(text)
+    tokens_per_sec = round(token_count / (total_latency_ms / 1000.0), 2) if total_latency_ms > 0 else 0.0
+    estimated_cost_usd = round((token_count / 1000.0) * config.COST_PER_1K_TOKENS_USD, 6)
+
+    telemetry_data = {
+        "model_latency_ms": model_latency_ms,
+        "style_latency_ms": style_latency_ms,
+        "total_latency_ms": total_latency_ms,
+        "token_count": token_count,
+        "tokens_per_sec": tokens_per_sec,
+        "estimated_cost_usd": estimated_cost_usd,
+    }
+
+    # Step 4 - log the decision + telemetry
     content_id = f"c_{uuid.uuid4().hex[:12]}"
     audit.log_decision(
         content_id=content_id,
@@ -247,18 +269,20 @@ def submit():
         style_score=style_score,
         combined_score=confidence,
         status="decided",
+        **telemetry_data,
     )
-    
-    # Step 1 - to get the route working without any logic
+
+    # Return original response keys + telemetry
     return jsonify({
-            "content_id": content_id,
-            "creator_id": creator_id,
-            "guess": guess,
-            "confidence": confidence,
-            "label": label_text,
-            "model_score": model_score,
-            "style_score": style_score,
-        }), 200
+        "content_id": content_id,
+        "creator_id": creator_id,
+        "guess": guess,
+        "confidence": confidence,
+        "label": label_text,
+        "model_score": model_score,
+        "style_score": style_score,
+        "telemetry": telemetry_data,
+    }), 200
 
 
 @app.post("/appeal")

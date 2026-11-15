@@ -306,3 +306,27 @@ is evidence, and the entries you paste into your README are what unit 8 grades.
 
 **Do not delete and recreate this repository.** You submit the same URL both
 units.
+
+---
+
+## Unit 9 Capstone — Path B Reproducible Run & Telemetry Verification
+
+### Environment & Memory Arithmetic (Why Path B)
+- **Python Version:** 
+Python 3.12+
+
+- **Pinned Dependencies:** 
+`requirements.txt` (`flask>=3.0,<4.0`, `flask-limiter>=3.5,<4.0`, `gunicorn>=21.2,<23.0`, `torch>=2.1`, `transformers>=4.36`)
+
+- **Model & RAM Footprint:**
+  - `torch` runtime: ~200–800 MB RAM
+  - Local `gpt2` model weights (`detector.py`): ~550 MB on disk / in RAM
+  - Flask + Gunicorn worker overhead: ~60 MB RAM
+  - **Total Peak Footprint:** ~800–1,400 MB RAM (exceeds the 512 MB limit of free cloud hosting tiers and lacks persistent disk across spin-downs, requiring Path B local deployment).
+
+### Clean-Checkout Single Startup Command
+
+To initialize the environment, pre-cache the local model weights, and start the production WSGI server (`gunicorn`) in a single command:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && python detector.py && gunicorn app:app --bind 127.0.0.1:5000
