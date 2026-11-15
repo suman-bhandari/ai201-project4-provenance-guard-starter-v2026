@@ -140,6 +140,13 @@ def warm_up() -> str:
     _load()
     return f"{config.DETECTOR_MODEL} loaded and ready."
 
+def count_tokens(text: str) -> int:
+    """Return the exact number of tokens produced by the model tokenizer."""
+    if not text or not text.strip():
+        return 0
+    if _tokenizer is None:
+        _load()
+    return len(_tokenizer.encode(text, truncation=True, max_length=1024))
 
 if __name__ == "__main__":
     import sys

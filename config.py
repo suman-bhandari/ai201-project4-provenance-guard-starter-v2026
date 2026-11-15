@@ -109,3 +109,6 @@ RATE_LIMIT_STORAGE = "memory://"
 LOG_DIR = ROOT / "logs"
 AUDIT_LOG = LOG_DIR / "audit.jsonl"
 RESULTS_DIR = ROOT / "results"
+
+# ── Capstone Telemetry & Cost Accounting ─────────────────────────────────────
+COST_PER_1K_TOKENS_USD = 0.00015  # $0.15 per 1M tokens shadow inference rate
