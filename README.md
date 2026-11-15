@@ -24,6 +24,29 @@
 > **The rest of this file is your submission.** Fill it in as you go.
 
 ---
+<!-- ═══════════════════════ UNIT 9: CAPSTONE ═══════════════════════ -->
+
+## The Shape
+
+**System:** 
+Provenance Guard
+
+**Shape:** 
+Shape A — Deploy and instrument  
+
+**Run Path:** 
+Path B — Local with reproducible environment and committed structured telemetry logs (`logs/audit.jsonl`), selected because `detector.py` loads a local PyTorch/HuggingFace causal language model (`distilgpt2`) that exceeds the 512 MB memory limit of free cloud tiers.
+
+**What I am adding:**
+I am building a production-grade LLMOps observability and telemetry layer around the `POST /submit` and `POST /appeal` pipeline. Specifically, I am instrumenting the service with high-resolution stage timers (`time.perf_counter()`) to isolate language-model inference latency (`model_latency_ms`) from stylometric processing latency (`style_latency_ms`) and total request turnaround (`total_latency_ms`). Additionally, I am exposing exact tokenizer counts (`token_count`), inference throughput (`tokens_per_sec`), and shadow compute cost accounting (`estimated_cost_usd` to 6 decimal places), persisting every request and rejection into a structured, queryable JSONL audit stream alongside a reproducible `RUNNING.md` deployment spec.
+
+**What is out of scope:**
+- I am not adding new detection signals, spell-check preprocessors, or third-party commercial LLM APIs.
+- I am not retuning the signal weights (`0.65` / `0.35`), modifying the disagreement dampener math, or shifting the classification thresholds (`0.35` / `0.72`).
+- I am not building a frontend web UI or migrating the flat-file JSONL store to an external relational database.
+My sole focus is operationalizing the existing detection service with production-grade latency, token throughput, and cost telemetry.
+
+---
 
 <!-- ─────────────────────────────────────────────────────────────────────────
      Unit 7 asks for the first five sections. Unit 8 adds the five below.
