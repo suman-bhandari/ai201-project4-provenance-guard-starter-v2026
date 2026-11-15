@@ -35,42 +35,33 @@ def _now() -> str:
 def log_decision(
     content_id: str,
     creator_id: str,
-    guess: str | None = None,
-    model_score: float | None = None,
-    style_score: float | None = None,
-    combined_score: float | None = None,
-    label: str | None = None,
+    guess: str,
+    label: str,
+    model_score: float,
+    style_score: float,
+    combined_score: float,
     status: str = "decided",
-    **extra,
+    **telemetry,
 ) -> dict:
     """
-    Write one decision to the audit log.
-
-    The nine required fields, all present from unit 7 whether or not you can
-    fill them yet:
-
-        timestamp, content_id, creator_id, guess,
-        model_score, style_score, combined_score, label, status
-
-    `status` moves over an item's life: `decided` when first judged,
-    `under_review` once the writer appeals.
-
-    Anything extra you pass gets written too — useful for `rejected` entries in
-    unit 8, where there's no decision but you still want the trace.
+    Record a classification decision plus LLMOps telemetry (latency, tokens, cost)
+    to logs/audit.jsonl and stdout.
     """
     entry = {
         "timestamp": _now(),
         "content_id": content_id,
         "creator_id": creator_id,
         "guess": guess,
-        "model_score": model_score,
-        "style_score": style_score,
-        "combined_score": combined_score,
         "label": label,
+        "model_score": round(model_score, 4) if model_score is not None else None,
+        "style_score": round(style_score, 4) if style_score is not None else None,
+        "combined_score": round(combined_score, 4) if combined_score is not None else None,
         "status": status,
+        **telemetry,
     }
-    entry.update(extra)
-    return _append(entry)
+    _append(entry)
+    print(json.dumps(entry, ensure_ascii=False), flush=True)
+    return entry
 
 
 def log_appeal(content_id: str, creator_id: str, reasoning: str) -> dict:
@@ -112,12 +103,19 @@ def log_rejection(creator_id: str, reason: str, **extra) -> dict:
     })
 
 
+def log_run(**fields) -> dict:
+    """Record a generic run/telemetry event to the audit log and stdout."""
+    entry = {"timestamp": _now(), **fields}
+    return _append(entry)
+
+
 def _append(entry: dict) -> dict:
     config.LOG_DIR.mkdir(parents=True, exist_ok=True)
     line = json.dumps(entry, ensure_ascii=False)
     with _lock:
         with config.AUDIT_LOG.open("a", encoding="utf-8") as f:
             f.write(line + "\n")
+    print(line, flush=True)  # Flush structured JSON to stdout for observability
     return entry
 
 
