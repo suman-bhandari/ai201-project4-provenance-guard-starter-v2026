@@ -740,6 +740,51 @@ Partially — it completely fixed the target crash and oversized inference leak,
 - Meanwhile, Criteria 2, 3, and 4 remained `MET` (`10/10`, `15/15`, `5/5`), and Criterion 1 (`10/10, 8/10, 8/10`) remained `MISSED` because Signal 1's CPU forward pass was intentionally left untouched.
 - The trade-off: Enforcing a hard `50,000`-character limit upfront eliminates wasted GPU/CPU inference on huge payloads (`$0.00` instead of `$0.000154` per oversized call), at the cost of rejecting legitimate long-form documents (such as book chapters or long legal transcripts) rather than silently truncating them to `1,024` tokens. Additionally, placing the `@limiter.limit` decorator ahead of schema validation protects the server from malformed-payload floods (`429`), even though it masks `400` validation responses during back-to-back automated test bursts.
 
+
+## What It Costs
+
+### Measured Per-Run Cost & How I Measured It
+Because Provenance Guard runs a local causal language model (`distilgpt2` via PyTorch/HuggingFace in `detector.py`) rather than calling a billed external API, I measured operational cost across two dimensions: wall-clock compute time and token-equivalent shadow inference spend.
+
+Using `benchmark_cost.py`, I sent 10 diverse human and AI paragraphs to `POST /submit` after a 1-request cold-start warm-up (`warmup_caller`), recording high-resolution timers (`time.perf_counter()`) and exact tokenizer counts (`detector.count_tokens()`):
+
+- Measured Per-Run Warm Cost: `$0.000005` USD per run (`$0.0050` per 1,000 runs) in shadow token spend at `$0.00015 / 1K tokens` (mean `33.7 tokens/run`), and `29.01 ms` of CPU compute per warm request (`28.93 ms` in Signal 1 `distilgpt2` + `0.07 ms` in Signal 2 `stylometry`), which equals `$0.00000017` USD per run in raw compute time on a dedicated 2 GB RAM / 1 vCPU instance (`~$15.00/month` = `$0.00000579/sec`).
+- Cold-Start & Rejection Costs: The first request after worker boot incurs a one-time `5,530.95 ms` model-loading penalty, whereas bad-path rejections (`status: "rejected"`) short-circuit in `0.00–0.09 ms` at `$0.000000` USD.
+
+### Daily Cost for 100 People a Day
+Assuming 100 active users submitting 5 texts each per day (`100 users × 5 runs = 500 runs/day`, or `15,000 runs/month`), running this service costs `$0.0025/day` (`$0.075/month`) in shadow inference spend (`500 runs × $0.000005/run`), plus the fixed `$15.00/month` (`$0.50/day`) for a 2 GB RAM server needed to hold the ~1.4 GB PyTorch + `distilgpt2` memory footprint—totaling `$0.5025/day` (`~$15.08/month`).
+
+---
+
+## What's Still Broken
+
+* Criterion 1 — Warm Inference Latency SLA (`< 35.0 ms`: `10/10, 8/10, 8/10` — MISSED):
+  * *What I'd do:* Wrap the `distilgpt2` forward pass in `detector.py::model_signal` with `torch.inference_mode()` and apply PyTorch dynamic INT8 quantization (`torch.quantization.quantize_dynamic`) or export the model to ONNX Runtime so CPU forward-pass latency drops from `~29–36 ms` down to `~10–15 ms`.
+  * *Why I stopped:* Milestone 6 strictly required isolating a single change (`app.py::submit` boundary validation), and modifying `detector.py` model execution would have altered two layers simultaneously.
+
+* Criterion 5 — Non-Object JSON & Oversized Payload Resilience (`5/5, 2/5, 1/5` — MISSED):
+  * *What I'd do:* Decouple the rate-limit key function in `app.py` so missing/malformed `creator_id` payloads do not collide on a tight 5 req/min loopback IP bucket during rapid multi-trial test suites, or apply schema validation before incrementing the per-IP rate counter.
+  * *Why I stopped:* Trial 1 proved that the boundary fix itself worked `5/5` (converting `json_integer` from `500` to `400` and blocking `oversized_60k` at `$0.00` cost); the `429` responses in Trials 2 and 3 were caused by consecutive test-runner bursts hitting the intentional Unit 8 rate limit rather than a broken schema guard.
+
+---
+
+## What I'd Do Next
+
+If this were a real production service and I had one more unit, the single thing I would do first is quantize `distilgpt2` to INT8 (or export it to ONNX Runtime) inside `detector.py::model_signal`. Because per-stage telemetry proved that Signal 1 accounts for 99.7% of total request latency and 100% of our Criterion 1 SLA misses, halving CPU forward-pass time would simultaneously eliminate tail-latency violations and double single-worker request throughput without increasing server RAM costs.
+
+---
+
+## How I Used AI
+
+Moment 1 (Capstone Milestone 2, Per-Stage Telemetry & Tokenizer Accounting)
+- *What I asked for:* How to measure per-stage latency and exact token counts in `app.py::submit` and `detector.py` without reloading `distilgpt2` or breaking existing `run_attacks.py` response fields.
+- *What came back:* A `count_tokens()` helper guarded by `if _tokenizer is None: _load()` and `time.perf_counter()` timers around `model_signal` and `style_signal` merged into `audit.log_decision` via `telemetry_data`.
+- *What I changed:* Added `COST_PER_1K_TOKENS_USD` to `config.py`, added `print(line, flush=True)` to `audit.py::_append`, and preserved all top-level response keys while nesting metrics under `"telemetry"`.
+
+Moment 2 (Capstone Milestone 5 & 6, Evaluation Harness & Boundary Diagnosis)
+- *What I asked for:* Structuring `run_capstone_eval.py` to verify both HTTP responses and matching `logs/audit.jsonl` entries across 3 trials, and diagnosing why `json_integer` returned HTTP `500`.
+- *What came back:* A 3-trial test runner matching `creator_id` records in `logs/audit.jsonl`, plus a root-cause diagnosis showing `request.get_json(silent=True) or {}` leaves truthy primitives like `42` as `int` before `.get()` runs.
+- *What I changed:* Replaced `or {}` with an explicit `if not isinstance(payload, dict):` guard and a `len(text) > 50000` check in `app.py::submit`, then verified the before/after trade-offs across all 3 trials.
 ---
 
 <!-- ─────────────────────────────────────────────────────────────────────────
