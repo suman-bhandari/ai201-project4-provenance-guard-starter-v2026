@@ -1,5 +1,58 @@
 # Acceptance criteria — Provenance Guard
 
+# Capstone Acceptance Criteria — Provenance Guard (Shape A, Path B)
+
+## 1. Warm Inference Latency SLA (Extension)
+
+Across 10 consecutive warm `POST /submit` requests (30–60 tokens each, measured after 1 cold-start warm-up request), at least **9 of 10** requests must complete with `telemetry.total_latency_ms < 35.0` ms.
+
+**Why this target:**
+In baseline benchmarking on local CPU (`distilgpt2`), warm requests averaged `29.01 ms` (range `26.13–32.90 ms`), with 99.7% of wall-clock time spent inside Signal 1's PyTorch forward pass. A `< 35.0 ms` ceiling across 9 of 10 runs catches accidental model reloads (`detector._load()`), tokenizer re-initialization, or synchronous disk I/O bottlenecks while allowing 1 outlier for OS scheduling jitter. A stricter `< 25.0 ms` target would fail against the local CPU compute floor, while a looser `< 500 ms` target would fail to detect model-reloading regressions.
+
+---
+
+## 2. Token and Cost Accounting Invariant (Extension)
+
+Across 10 valid `POST /submit` requests spanning varying input lengths (25 to 250 tokens), **10 of 10** JSON responses and their matching `logs/audit.jsonl` entries must satisfy both:
+1. `estimated_cost_usd == round((token_count / 1000.0) * config.COST_PER_1K_TOKENS_USD, 6)`
+2. `model_latency_ms + style_latency_ms <= total_latency_ms`
+
+**Why this target:**
+Token accounting and stage-latency decomposition are deterministic invariants. Even a single mismatch (9 of 10) indicates floating-point rounding drift, mismatched tokenizer truncation windows (`max_length=1024`), or inverted `time.perf_counter()` boundaries. Anything below 10 of 10 corrupts downstream unit-economics reporting.
+
+---
+
+## 3. Structured Audit Log Completeness and Schema Parity (Extension)
+
+Across a mixed batch of 15 requests (10 valid submissions and 5 rejected bad inputs), **15 of 15** requests must append a valid, parseable JSON line to `logs/audit.jsonl` containing all 5 core telemetry fields (`timestamp`, `status`, `total_latency_ms`, `token_count`, `estimated_cost_usd`) with zero dropped writes or `JSONDecodeError` failures.
+
+**Why this target:**
+In an LLMOps observability layer, silent log drops create unrecorded compute spend and blind spots during production incidents. Requiring 15 of 15 verifies that `audit._lock` safely serializes writes across both `audit.log_decision` and `audit.log_rejection`. Accepting 14 of 15 would mask silent exception paths that return an HTTP response without persisting an audit record.
+
+---
+
+## 4. Bad-Path Rejection Telemetry and Zero-Cost Short-Circuit (Extension + Failure Path)
+
+Across 5 invalid `POST /submit` payloads (empty string `""`, whitespace-only `"   \n\t  "`, 1-token text `"hi"`, missing `text` field, and numeric `text: 123`), **5 of 5** requests must return HTTP `400`, write a `status: "rejected"` entry to `logs/audit.jsonl` with a non-empty `reason` and `estimated_cost_usd == 0.0`, and short-circuit in `total_latency_ms < 5.0` ms.
+
+**Why this target:**
+Input validation must block malformed payloads before invoking `distilgpt2` inference (~29 ms CPU compute). Verifying `estimated_cost_usd == 0.0` and `total_latency_ms < 5.0` ms proves expensive model execution never runs on bad inputs, while 5 of 5 guarantees every validation guard logs its rejection reason. A looser latency target (e.g., `< 50 ms`) would allow bad inputs to leak into model inference unnoticed.
+
+---
+
+## 5. Non-Object JSON and Oversized Payload Resilience (Failure Path)
+
+Across 5 pathological HTTP requests to `POST /submit` (a JSON array `[]`, malformed JSON syntax `{bad`, an empty request body, a JSON integer `42`, and a 60,000-character string), **5 of 5** requests must return HTTP `400` with a structured JSON error payload and **0** unhandled HTTP `500` exceptions.
+
+**Why this target:**
+An unhandled `500` error returns an HTML debugger/error page instead of JSON, breaking API clients and bypassing `audit.log_rejection` completely. Requiring 5 of 5 `400` responses stress-tests the outer request boundary of `app.py::submit` against non-dictionary JSON types (`list`, `int`) and extreme payload lengths before `payload.get()` or model inference executes.
+
+
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────
+UNIT 7
+
 Five criteria that say what "working" means for this service, written in unit 7
 **before** you built it.
 
@@ -87,7 +140,8 @@ Inputs that are empty, whitespace-only, shorter than 3 tokens, or longer than 50
 Both underlying scoring modules crash on empty or undersized inputs; input validation must protect the service before expensive model inference runs.
 
 ---
-
+     ───────────────────────────────────────────────────────────────────────── -->
+     
 <!-- ─────────────────────────────────────────────────────────────────────────
      UNIT 8 — read this before you change anything above.
 
