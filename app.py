@@ -212,24 +212,33 @@ def submit():
     creator_id = payload.get("creator_id", "unknown")
 
     # Step 2 - JSON goes in: pull text and creator_id out of the body
+    # 1. Missing or empty text rejection
     if not isinstance(text, str) or not text.strip():
+        total_latency_ms = round((time.perf_counter() - req_start) * 1000.0, 2)
         audit.log_rejection(
             creator_id=creator_id,
             reason="missing_or_empty_text",
+            total_latency_ms=total_latency_ms,
+            token_count=0,
+            estimated_cost_usd=0.0,
         )
         return jsonify({
             "error": "bad_request", 
             "message": "Send JSON with a non-empty 'text'."
         }), 400
 
-    # Step 3 - Time Signal 1 (Model Perplexity)
+    # 2. Signal 1 ValueError (e.g., text too short / below token window)
     t_model_start = time.perf_counter()
     try:
         model_score = detector.model_signal(text)
     except ValueError as exc:
+        total_latency_ms = round((time.perf_counter() - req_start) * 1000.0, 2)
         audit.log_rejection(
             creator_id=creator_id,
             reason=str(exc),
+            total_latency_ms=total_latency_ms,
+            token_count=detector.count_tokens(text),
+            estimated_cost_usd=0.0,
         )
         return jsonify({"error": "bad_request", "message": str(exc)}), 400
     model_latency_ms = round((time.perf_counter() - t_model_start) * 1000.0, 2)

@@ -46,6 +46,55 @@ I am building a production-grade LLMOps observability and telemetry layer around
 - I am not building a frontend web UI or migrating the flat-file JSONL store to an external relational database.
 My sole focus is operationalizing the existing detection service with production-grade latency, token throughput, and cost telemetry.
 
+
+## Instrumentation
+
+Every request to `POST /submit` writes a structured JSONL entry to `logs/audit.jsonl` (and flushes to `stdout`) via `audit.py::log_decision` and `audit.py::log_rejection`. 
+
+- **Decision records** include the 9 core provenance fields (`timestamp`, `content_id`, `creator_id`, `guess`, `model_score`, `style_score`, `combined_score`, `label`, `status`) plus 6 LLMOps telemetry fields: `model_latency_ms`, `style_latency_ms`, `total_latency_ms`, `token_count`, `tokens_per_sec`, and `estimated_cost_usd`.
+- **Failure/Rejection records** (`status: "rejected"`) log `timestamp`, `creator_id`, `event`, `status`, `reason`, `total_latency_ms`, `token_count`, and `estimated_cost_usd` so rejected payloads leave an observable trace in the same stream.
+
+### 10 Real Run Entries + 2 Rejected Failure Entries (`logs/audit.jsonl`)
+
+*Produced by:* `app.py::submit` -> `audit.py::log_decision` & `audit.py::log_rejection`
+
+```jsonl
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_986c5bbedc25", "creator_id": "warmup_caller", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.881, "style_score": 0.4743, "combined_score": 0.6193, "status": "decided", "model_latency_ms": 5530.75, "style_latency_ms": 0.19, "total_latency_ms": 5530.95, "token_count": 36, "tokens_per_sec": 6.51, "estimated_cost_usd": 5e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_2d8b1968c799", "creator_id": "bench_user_01", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.881, "style_score": 0.4743, "combined_score": 0.6193, "status": "decided", "model_latency_ms": 31.77, "style_latency_ms": 0.08, "total_latency_ms": 31.85, "token_count": 36, "tokens_per_sec": 1130.3, "estimated_cost_usd": 5e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_6668d1861a3a", "creator_id": "bench_user_02", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.7658, "style_score": 0.5666, "combined_score": 0.6961, "status": "decided", "model_latency_ms": 31.43, "style_latency_ms": 0.07, "total_latency_ms": 31.51, "token_count": 38, "tokens_per_sec": 1205.97, "estimated_cost_usd": 6e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_fee680c20713", "creator_id": "bench_user_03", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.5148, "style_score": 0.4599, "combined_score": 0.4956, "status": "decided", "model_latency_ms": 26.7, "style_latency_ms": 0.07, "total_latency_ms": 26.77, "token_count": 28, "tokens_per_sec": 1045.95, "estimated_cost_usd": 4e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_4a47d6e29a64", "creator_id": "bench_user_04", "guess": "human", "label": "We think this was written by a person.", "model_score": 0.1039, "style_score": 0.4007, "combined_score": 0.2078, "status": "decided", "model_latency_ms": 30.77, "style_latency_ms": 0.07, "total_latency_ms": 30.84, "token_count": 37, "tokens_per_sec": 1199.74, "estimated_cost_usd": 6e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_f37201184d74", "creator_id": "bench_user_05", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.392, "style_score": 0.5444, "combined_score": 0.4453, "status": "decided", "model_latency_ms": 26.05, "style_latency_ms": 0.07, "total_latency_ms": 26.13, "token_count": 27, "tokens_per_sec": 1033.3, "estimated_cost_usd": 4e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_9782c6ac1207", "creator_id": "bench_user_06", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.2875, "style_score": 0.4892, "combined_score": 0.3581, "status": "decided", "model_latency_ms": 32.83, "style_latency_ms": 0.07, "total_latency_ms": 32.9, "token_count": 45, "tokens_per_sec": 1367.78, "estimated_cost_usd": 7e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_8dc00e2cefb4", "creator_id": "bench_user_07", "guess": "unsure", "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.", "model_score": 0.4076, "style_score": 0.6176, "combined_score": 0.4811, "status": "decided", "model_latency_ms": 26.86, "style_latency_ms": 0.06, "total_latency_ms": 26.92, "token_count": 31, "tokens_per_sec": 1151.56, "estimated_cost_usd": 5e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_66c7b0bb1dac", "creator_id": "bench_user_08", "guess": "human", "label": "We think this was written by a person.", "model_score": 0.2482, "style_score": 0.3394, "combined_score": 0.2801, "status": "decided", "model_latency_ms": 30.49, "style_latency_ms": 0.07, "total_latency_ms": 30.57, "token_count": 35, "tokens_per_sec": 1144.91, "estimated_cost_usd": 5e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_f1cae4197ee8", "creator_id": "bench_user_09", "guess": "human", "label": "We think this was written by a person.", "model_score": 0.3783, "style_score": 0.251, "combined_score": 0.3337, "status": "decided", "model_latency_ms": 26.15, "style_latency_ms": 0.07, "total_latency_ms": 26.22, "token_count": 30, "tokens_per_sec": 1144.16, "estimated_cost_usd": 4e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "content_id": "c_33610a460e09", "creator_id": "bench_user_10", "guess": "human", "label": "We think this was written by a person.", "model_score": 0.0821, "style_score": 0.3656, "combined_score": 0.1813, "status": "decided", "model_latency_ms": 26.27, "style_latency_ms": 0.07, "total_latency_ms": 26.35, "token_count": 30, "tokens_per_sec": 1138.52, "estimated_cost_usd": 4e-06}
+{"timestamp": "2026-11-16T00:58:59+00:00", "creator_id": "bench_fail_empty", "event": "rejected", "status": "rejected", "reason": "missing_or_empty_text", "total_latency_ms": 0.0, "token_count": 0, "estimated_cost_usd": 0.0}
+{"timestamp": "2026-11-16T00:58:59+00:00", "creator_id": "bench_fail_short", "event": "rejected", "status": "rejected", "reason": "Text is too short to score — a few sentences at least.", "total_latency_ms": 0.07, "token_count": 1, "estimated_cost_usd": 0.0}
+```
+
+## What It Costs
+
+### How I Measured It
+Because Provenance Guard executes a local causal language model (`distilgpt2` via PyTorch/HuggingFace in `detector.py`) rather than calling a billed external API, the real operational cost has two components: **wall-clock compute time per request** and **token-equivalent shadow inference spend**.
+
+I ran `benchmark_cost.py` against `POST /submit` across 10 diverse human and AI paragraphs after a 1-request cold-start warm-up (`warmup_caller`), recording high-resolution timers (`time.perf_counter()`) and exact HuggingFace tokenizer counts (`detector.count_tokens()`):
+
+| Metric | Cold Start (Run 0) | 10-Run Warm Average | Min | Max |
+|---|---|---|---|---|
+| Total Request Latency (`total_latency_ms`) | `5530.95 ms` | `29.01 ms` | `26.13 ms` | `32.90 ms` |
+| Signal 1: Model Perplexity (`model_latency_ms`) | `5530.75 ms` | `28.93 ms` (99.7%) | `26.05 ms` | `32.83 ms` |
+| Signal 2: Stylometry (`style_latency_ms`) | `0.19 ms` | `0.07 ms` (0.2%) | `0.06 ms` | `0.08 ms` |
+| Input Size (`token_count`) | `36 tokens` | `33.7 tokens` | `27 tokens` | `45 tokens` |
+| Inference Throughput (`tokens_per_sec`) | `6.51 tok/s` | `1,156.22 tok/s` | `1,033.30 tok/s` | `1,367.78 tok/s` |
+| Shadow Token Cost (`estimated_cost_usd` @ $0.15/1M tok) | `$0.000005` | `$0.000005 USD` | `$0.000004` | `$0.000007` |
+
+### Unit Economics Summary
+1. Compute Time Bottleneck: On warm requests, 99.7% of total wall-clock latency (`28.93 ms` of `29.01 ms`) is spent inside Signal 1 (`detector.model_signal`), while Signal 2 (`stylometry.style_signal`) takes only `0.07 ms`. Cold-start model initialization adds a `~5.53 s` one-time penalty on the first request after worker boot (`warmup_caller`), while input validation rejections (`bench_fail_empty`, `bench_fail_short`) short-circuit in `0.00–0.07 ms` before touching the model.
+2. Dollar Cost per Run:
+   - Shadow Token Cost: At `$0.00015 / 1K tokens`, one average 33.7-token submission costs `$0.000005 USD` (`$0.0050` per 1,000 checks).
+   - Cloud CPU Compute Equivalent: Hosting this ~1.4 GB RAM footprint on a dedicated 2 GB RAM / 1 vCPU cloud instance (e.g., Render Standard or AWS `t3.small` at `~$15/month` = `$0.00000579/sec`) costs `$0.00000017 USD` of compute time per 29.01 ms warm run (`$0.00017` per 1,000 checks).
 ---
 
 <!-- ─────────────────────────────────────────────────────────────────────────
