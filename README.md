@@ -396,10 +396,349 @@ I ran `benchmark_cost.py` against `POST /submit` across 10 diverse human and AI 
   }
 ]
 ```
-                              
 
+## Diagnoses
 
+### Criterion Verdicts (Before Improvement)
+1. Criterion 1 — Warm Inference Latency SLA (< 35.0 ms): `MISSED` (6/10, 8/10, 9/10 — target >= 9/10 in every run)
+2. Criterion 2 — Token and Cost Accounting Invariant: `MET` (10/10, 10/10, 10/10)
+3. Criterion 3 — Structured Audit Log Completeness: `MET` (15/15, 15/15, 15/15)
+4. Criterion 4 — Bad-Path Rejection Telemetry & Short-Circuit: `MET` (5/5, 5/5, 5/5)
+5. Criterion 5 — Non-Object JSON & Oversized Payload Resilience: `MISSED` (3/5, 1/5, 0/5 — target 5/5)
 
+---
+
+### Root-Cause Diagnosis for Misses
+
+* Criterion 1 (Warm Inference Latency SLA — MISSED: 6/10, 8/10, 9/10):
+  * Stage: Signal 1 (`detector.py::model_signal`) synchronous PyTorch CPU forward pass.
+  * Mechanism: Per-stage telemetry proves that Signal 1 consumes >99.7% of total wall-clock latency (e.g., `47.51 ms` of `47.65 ms` in `before_t1_a9c5d8_c1_01` and `35.46 ms` of `35.55 ms` in `before_t1_a9c5d8_c1_02`). Because `distilgpt2` executes single-sample inference synchronously on CPU, minor OS thread scheduling contention or Python garbage collection pushes 1–4 requests per 10-call batch into the `35–48 ms` range, violating the strict `< 35.0 ms` SLA ceiling.
+
+* Criterion 5 (Non-Object JSON & Oversized Payload Resilience — MISSED: 3/5, 1/5, 0/5):
+  * Stage: Outer HTTP request ingestion and validation boundary (`app.py::submit`).
+  * Mechanism (Three interacting failures at the route boundary):
+    1. Non-dict JSON primitive crash (`HTTP 500`): `app.py::submit` parses JSON via `payload = request.get_json(silent=True) or {}` and calls `payload.get("text")`. When the request body is a truthy JSON primitive like `42`, `or {}` does not trigger; `payload` remains an `int`, raising an unhandled `AttributeError: 'int' object has no attribute 'get'` that returns a Werkzeug HTML `500` page and bypasses `audit.log_rejection`.
+    2. Missing upper character bound (`HTTP 200` instead of `400`): `app.py::submit` validates non-emptiness (`not text.strip()`) but enforces no maximum character ceiling (`50,000` chars). Consequently, `oversized_60k` entered `detector.model_signal()`, truncated silently to `1,024` tokens, consumed `192.57 ms` of CPU compute (`$0.000154` shadow cost), and returned `HTTP 200` instead of short-circuiting with `400`.
+    3. Cross-trial IP rate-limit bleed (`HTTP 429` in Runs 2 & 3): Because `json_array`, `malformed_json`, `empty_body`, and `json_integer` lack a `creator_id`, Flask-Limiter keyed them by client IP (`127.0.0.1` at 5 req/min). Running all 3 trials back-to-back within 60 seconds exhausted the per-minute IP bucket, causing Runs 2 and 3 to return `429` instead of `400` (`1/5` and `0/5`).
+
+* Pattern Across Misses: All deterministic functional criteria (`Criteria 2, 3, and 4`) passed 100% across every trial. The misses isolate cleanly into two layers: (1) unguarded outer boundary assumptions in `app.py::submit` (`isinstance(payload, dict)` and `len(text) <= 50000`) and (2) CPU inference tail latency in `detector.py::model_signal`.
+
+## The Improvement
+
+**What I changed:**
+Added explicit outer request-boundary validation in `app.py::submit` that checks `isinstance(payload, dict)` immediately after JSON parsing and enforces `len(text) <= 50000` before running tokenization or PyTorch model inference, logging every rejection via `audit.log_rejection` with `total_latency_ms` and `estimated_cost_usd=0.0`.
+
+**Which diagnosis pointed at it:**
+Criterion 5's diagnosis (`app.py::submit` outer boundary), where non-object JSON primitives (`42`) crashed with an unhandled `500 AttributeError` and 60,000-character strings bypassed validation to consume `192.57 ms` of CPU inference (`200 OK`).
+
+---
+
+### Side-by-Side Comparison (Before vs. After)
+
+| Criterion | Target | Before (R1 / R2 / R3) | After (R1 / R2 / R3) | After Verdict |
+|---|---|---|---|---|
+| 1. Warm inference latency SLA (< 35.0 ms) | >= 9 of 10 | 6/10 · 8/10 · 9/10 | 10/10 · 8/10 · 8/10 | MISSED |
+| 2. Token and cost accounting invariant | 10 of 10 | 10/10 · 10/10 · 10/10 | 10/10 · 10/10 · 10/10 | MET |
+| 3. Structured audit log completeness | 15 of 15 | 15/15 · 15/15 · 15/15 | 15/15 · 15/15 · 15/15 | MET |
+| 4. Bad-path rejection telemetry & short-circuit | 5 of 5 | 5/5 · 5/5 · 5/5 | 5/5 · 5/5 · 5/5 | MET |
+| 5. Non-object JSON & oversized payload resilience | 5 of 5 | 3/5 · 1/5 · 0/5 | 5/5 · 2/5 · 1/5 | MISSED |
+
+---
+
+### Evaluation Run — After (Trial 1 Real Output)
+
+*Produced by:* 
+`run_capstone_eval.py::main` -> `app.py::submit` & `audit.py::log_decision` / `audit.py::log_rejection`
+
+#### Criterion 1 — Warm Inference Latency SLA
+```json
+[
+  {
+    "creator_id": "after_t1_6519cc_c1_01",
+    "status": 200,
+    "total_latency_ms": 30.3,
+    "model_latency_ms": 30.21,
+    "token_count": 36,
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c1_02",
+    "status": 200,
+    "total_latency_ms": 30.95,
+    "model_latency_ms": 30.87,
+    "token_count": 38,
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c1_03",
+    "status": 200,
+    "total_latency_ms": 26.38,
+    "model_latency_ms": 26.31,
+    "token_count": 28,
+    "passed": true
+  }
+]
+```
+
+#### Criterion 2 — Token & Cost Accounting Invariant
+```json
+[
+  {
+    "creator_id": "after_t1_6519cc_c2_01",
+    "token_count": 16,
+    "estimated_cost_usd": 2e-06,
+    "expected_cost_usd": 2e-06,
+    "model_latency_ms": 19.07,
+    "style_latency_ms": 0.02,
+    "total_latency_ms": 19.1,
+    "log_matched": true,
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c2_02",
+    "token_count": 36,
+    "estimated_cost_usd": 5e-06,
+    "expected_cost_usd": 5e-06,
+    "model_latency_ms": 29.98,
+    "style_latency_ms": 0.07,
+    "total_latency_ms": 30.05,
+    "log_matched": true,
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c2_03",
+    "token_count": 38,
+    "estimated_cost_usd": 6e-06,
+    "expected_cost_usd": 6e-06,
+    "model_latency_ms": 31.11,
+    "style_latency_ms": 0.07,
+    "total_latency_ms": 31.18,
+    "log_matched": true,
+    "passed": true
+  }
+]
+```
+
+#### Criterion 3 — Structured Audit Log Completeness
+```json
+[
+  {
+    "timestamp": "2026-11-16T03:05:30+00:00",
+    "content_id": "c_5477bc52de06",
+    "creator_id": "after_t1_6519cc_c3_ok_01",
+    "guess": "unsure",
+    "label": "We can't tell for sure who wrote this \u2014 it shares characteristics of both human and automated writing.",
+    "model_score": 0.7658,
+    "style_score": 0.5666,
+    "combined_score": 0.6961,
+    "status": "decided",
+    "model_latency_ms": 35.27,
+    "style_latency_ms": 0.08,
+    "total_latency_ms": 35.36,
+    "token_count": 38,
+    "tokens_per_sec": 1074.66,
+    "estimated_cost_usd": 6e-06
+  },
+  {
+    "timestamp": "2026-11-16T03:05:30+00:00",
+    "content_id": "c_68b2a017fcc1",
+    "creator_id": "after_t1_6519cc_c3_ok_02",
+    "guess": "unsure",
+    "label": "We can't tell for sure who wrote this \u2014 it shares characteristics of both human and automated writing.",
+    "model_score": 0.5148,
+    "style_score": 0.4599,
+    "combined_score": 0.4956,
+    "status": "decided",
+    "model_latency_ms": 41.0,
+    "style_latency_ms": 0.09,
+    "total_latency_ms": 41.1,
+    "token_count": 28,
+    "tokens_per_sec": 681.27,
+    "estimated_cost_usd": 4e-06
+  },
+  {
+    "timestamp": "2026-11-16T03:05:30+00:00",
+    "content_id": "c_f4fd436cece1",
+    "creator_id": "after_t1_6519cc_c3_ok_03",
+    "guess": "human",
+    "label": "We think this was written by a person.",
+    "model_score": 0.1039,
+    "style_score": 0.4007,
+    "combined_score": 0.2078,
+    "status": "decided",
+    "model_latency_ms": 46.5,
+    "style_latency_ms": 0.08,
+    "total_latency_ms": 46.59,
+    "token_count": 37,
+    "tokens_per_sec": 794.16,
+    "estimated_cost_usd": 6e-06
+  },
+  {
+    "timestamp": "2026-11-16T03:05:30+00:00",
+    "creator_id": "after_t1_6519cc_c3_bad_01",
+    "event": "rejected",
+    "status": "rejected",
+    "reason": "missing_or_empty_text",
+    "total_latency_ms": 0.0,
+    "token_count": 0,
+    "estimated_cost_usd": 0.0
+  },
+  {
+    "timestamp": "2026-11-16T03:05:30+00:00",
+    "creator_id": "after_t1_6519cc_c3_bad_02",
+    "event": "rejected",
+    "status": "rejected",
+    "reason": "missing_or_empty_text",
+    "total_latency_ms": 0.0,
+    "token_count": 0,
+    "estimated_cost_usd": 0.0
+  }
+]
+```
+
+#### Criterion 4 — Bad-Path Rejection Telemetry & Short-Circuit
+```json
+[
+  {
+    "creator_id": "after_t1_6519cc_c4_empty",
+    "http_status": 400,
+    "log_entry": {
+      "timestamp": "2026-11-16T03:05:30+00:00",
+      "creator_id": "after_t1_6519cc_c4_empty",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "missing_or_empty_text",
+      "total_latency_ms": 0.0,
+      "token_count": 0,
+      "estimated_cost_usd": 0.0
+    },
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c4_ws",
+    "http_status": 400,
+    "log_entry": {
+      "timestamp": "2026-11-16T03:05:30+00:00",
+      "creator_id": "after_t1_6519cc_c4_ws",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "missing_or_empty_text",
+      "total_latency_ms": 0.0,
+      "token_count": 0,
+      "estimated_cost_usd": 0.0
+    },
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c4_short",
+    "http_status": 400,
+    "log_entry": {
+      "timestamp": "2026-11-16T03:05:30+00:00",
+      "creator_id": "after_t1_6519cc_c4_short",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "Text is too short to score \u2014 a few sentences at least.",
+      "total_latency_ms": 0.09,
+      "token_count": 1,
+      "estimated_cost_usd": 0.0
+    },
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c4_missing",
+    "http_status": 400,
+    "log_entry": {
+      "timestamp": "2026-11-16T03:05:30+00:00",
+      "creator_id": "after_t1_6519cc_c4_missing",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "missing_or_empty_text",
+      "total_latency_ms": 0.0,
+      "token_count": 0,
+      "estimated_cost_usd": 0.0
+    },
+    "passed": true
+  },
+  {
+    "creator_id": "after_t1_6519cc_c4_int",
+    "http_status": 400,
+    "log_entry": {
+      "timestamp": "2026-11-16T03:05:30+00:00",
+      "creator_id": "after_t1_6519cc_c4_int",
+      "event": "rejected",
+      "status": "rejected",
+      "reason": "missing_or_empty_text",
+      "total_latency_ms": 0.0,
+      "token_count": 0,
+      "estimated_cost_usd": 0.0
+    },
+    "passed": true
+  }
+]
+```
+
+#### Criterion 5 — Non-Object JSON & Oversized Payload Resilience
+```json
+[
+  {
+    "case": "json_array",
+    "status": 400,
+    "response_preview": {
+      "error": "bad_request",
+      "message": "Request body must be a JSON object."
+    },
+    "passed": true
+  },
+  {
+    "case": "malformed_json",
+    "status": 400,
+    "response_preview": {
+      "error": "bad_request",
+      "message": "Request body must be a JSON object."
+    },
+    "passed": true
+  },
+  {
+    "case": "empty_body",
+    "status": 400,
+    "response_preview": {
+      "error": "bad_request",
+      "message": "Request body must be a JSON object."
+    },
+    "passed": true
+  },
+  {
+    "case": "json_integer",
+    "status": 400,
+    "response_preview": {
+      "error": "bad_request",
+      "message": "Request body must be a JSON object."
+    },
+    "passed": true
+  },
+  {
+    "case": "oversized_60k",
+    "status": 400,
+    "response_preview": {
+      "error": "bad_request",
+      "message": "Text exceeds maximum allowed length of 50,000 characters."
+    },
+    "passed": true
+  }
+]
+```
+
+---
+
+### Did It Help, and What Is the Trade-Off?
+
+- Did it help: 
+Partially — it completely fixed the target crash and oversized inference leak, but Criterion 5's overall 3-trial verdict stayed `MISSED` due to rate-limiter interaction across rapid trials.
+
+- In Trial 1, Criterion 5 jumped from `3/5` to `5/5`: `json_integer` (`42`) returned a structured `400` JSON error instead of an unhandled `500` HTML debugger page, and `oversized_60k` short-circuited with `400` at `$0.00` cost instead of spending `195.78 ms` inside `distilgpt2`.
+- However, in Trials 2 and 3, Criterion 5 scored `2/5` and `1/5` because the 4 non-object payloads (`[]`, `{bad_json`, empty body, `42`) lack a `creator_id` and fall back to the shared loopback IP rate-limit bucket (`127.0.0.1` at 5 req/min). Running all 3 trials consecutively within 60 seconds exhausted that per-minute bucket, causing Flask-Limiter to intercept subsequent malformed payloads with `429 Too Many Requests` before the `400` boundary check could run.
+- Meanwhile, Criteria 2, 3, and 4 remained `MET` (`10/10`, `15/15`, `5/5`), and Criterion 1 (`10/10, 8/10, 8/10`) remained `MISSED` because Signal 1's CPU forward pass was intentionally left untouched.
+- The trade-off: Enforcing a hard `50,000`-character limit upfront eliminates wasted GPU/CPU inference on huge payloads (`$0.00` instead of `$0.000154` per oversized call), at the cost of rejecting legitimate long-form documents (such as book chapters or long legal transcripts) rather than silently truncating them to `1,024` tokens. Additionally, placing the `@limiter.limit` decorator ahead of schema validation protects the server from malformed-payload floods (`429`), even though it masks `400` validation responses during back-to-back automated test bursts.
 
 ---
 
@@ -958,7 +1297,7 @@ that produced it:
 
 * **Criterion 1 (False Positives on Plain Human Writing — MISSED: 3/10 labeled AI):**
   * **Stage:** Signal one (`detector.py`) and The label mapping (`config.py::AI_THRESHOLD`).
-  * **Mechanism:** Plain, everyday prose ("I walked to the grocery store...", "My sister called yesterday...") uses highly frequent, common vocabulary and standard SVO sentence patterns. Language model perplexity on these sentences is low, causing signal one to output high AI scores (0.7375–0.8149)[cite: 7]. Because the combining rule weights signal one at 0.65[cite: 5], and the AI label threshold is set at 0.65, any moderate style score pulls the final confidence into the 0.66–0.70 range, resulting in a false "ai" classification[cite: 5, 7].
+  * **Mechanism:** Plain, everyday prose ("I walked to the grocery store...", "My sister called yesterday...") uses highly frequent, common vocabulary and standard SVO sentence patterns. Language model perplexity on these sentences is low, causing signal one to output high AI scores (0.7375–0.8149)[cite: 7]. Because the combining rule weights signal one at 0.65, and the AI label threshold is set at 0.65, any moderate style score pulls the final confidence into the 0.66–0.70 range, resulting in a false "ai" classification[cite: 5, 7].
 
 * **Criterion 2 (Score Separation Between Archetypes — MISSED: Gap of 0.1914 vs target 0.35, and Run 3 429):**
   * **Stage:** Signal two (`stylometry.py`) and The route (`app.py::submit` rate limiter).
@@ -967,7 +1306,7 @@ that produced it:
 
 * **Criterion 3 (Label Reachability — MISSED: 0 of 12 samples reached "ai"):**
   * **Stage:** The combining rule (`scoring.py::combine_signals`) and The label mapping (`config.py`).
-  * **Mechanism:** All 12 calibration samples clustered between 0.33 and 0.62 in composite score[cite: 7]. The disagreement dampener pulls any score where signals differ by > 0.40 directly toward 0.50[cite: 5]. Because signal one and signal two frequently diverged on borderline and structured AI texts (e.g., model score 0.8810 vs style score 0.4743)[cite: 7], the dampener actively compressed scores into the "unsure" band, preventing any sample from reaching the 0.65 AI threshold[cite: 5, 7].
+  * **Mechanism:** All 12 calibration samples clustered between 0.33 and 0.62 in composite score[cite: 7]. The disagreement dampener pulls any score where signals differ by > 0.40 directly toward 0.50. Because signal one and signal two frequently diverged on borderline and structured AI texts (e.g., model score 0.8810 vs style score 0.4743)[cite: 7], the dampener actively compressed scores into the "unsure" band, preventing any sample from reaching the 0.65 AI threshold[cite: 5, 7].
 
 * **Criterion 5 (Pathological Input Rejection — MISSED: 5/6 returned 400, 1 returned 200):**
   * **Stage:** The route (`app.py::submit`).
@@ -979,15 +1318,15 @@ that produced it:
 
 * **Attack RQ07 (Body is a JSON array `[]`, returned HTTP 500):**
   * **Stage:** The route (`app.py::submit`).
-  * **Mechanism:** The route extracts JSON using `payload = request.get_json(silent=True) or {}`. When the request body is a JSON array (`[]`), `payload` evaluates to a Python `list`. Subsequent code calls `payload.get("text")`, triggering an unhandled `AttributeError: 'list' object has no attribute 'get'` and crashing Flask with a 500 server error[cite: 6].
+  * **Mechanism:** The route extracts JSON using `payload = request.get_json(silent=True) or {}`. When the request body is a JSON array (`[]`), `payload` evaluates to a Python `list`. Subsequent code calls `payload.get("text")`, triggering an unhandled `AttributeError: 'list' object has no attribute 'get'` and crashing Flask with a 500 server error.
 
 * **Attack EV01 (Evasion via typos, scored 0.280 as human):**
   * **Stage:** Signal two (`stylometry.py::type_token_ratio`).
-  * **Mechanism:** The attacker injected random typographical errors into AI-generated text[cite: 6]. `type_token_ratio` counts unique word tokens[cite: 2]. Because misspelled words are treated as unique vocabulary tokens, lexical variety artificially inflated, lowering the style AI score to 0.4951[cite: 6]. Simultaneously, rare misspellings increased model perplexity (lowering model score to 0.1635)[cite: 1, 6], evading detection completely[cite: 6].
+  * **Mechanism:** The attacker injected random typographical errors into AI-generated text. `type_token_ratio` counts unique word tokens[cite: 2]. Because misspelled words are treated as unique vocabulary tokens, lexical variety artificially inflated, lowering the style AI score to 0.4951. Simultaneously, rare misspellings increased model perplexity (lowering model score to 0.1635)[cite: 1, 6], evading detection completely.
 
 * **Attacks FP02, FP03, FP04, FP05 (False positives on formal/non-native human prose):**
   * **Stage:** Signal one (`detector.py`) and The combining rule (`scoring.py`).
-  * **Mechanism:** All four texts used standard grammatical conventions, clear vocabulary, or rigid rubric formats[cite: 6]. Signal one registered low perplexity and returned scores between 0.73 and 0.83[cite: 6]. Because signal two did not score low enough to create a > 0.40 divergence gap, the dampener did not engage, leaving combined scores at 0.66–0.71 (classifying real writers as AI)[cite: 5, 6].
+  * **Mechanism:** All four texts used standard grammatical conventions, clear vocabulary, or rigid rubric formats. Signal one registered low perplexity and returned scores between 0.73 and 0.83. Because signal two did not score low enough to create a > 0.40 divergence gap, the dampener did not engage, leaving combined scores at 0.66–0.71 (classifying real writers as AI).
 
 * **Attack PI02 (Prompt injection disguised as system prompt, scored 0.237 as human):**
   * **Stage:** Signal one (`detector.py`).

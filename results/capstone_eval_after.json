@@ -1,0 +1,1254 @@
+[
+  {
+    "trial": 1,
+    "timestamp": "2026-11-16T03:05:30+00:00",
+    "c1": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t1_6519cc_c1_01",
+          "status": 200,
+          "total_latency_ms": 30.3,
+          "model_latency_ms": 30.21,
+          "token_count": 36,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_02",
+          "status": 200,
+          "total_latency_ms": 30.95,
+          "model_latency_ms": 30.87,
+          "token_count": 38,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_03",
+          "status": 200,
+          "total_latency_ms": 26.38,
+          "model_latency_ms": 26.31,
+          "token_count": 28,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_04",
+          "status": 200,
+          "total_latency_ms": 31.31,
+          "model_latency_ms": 31.23,
+          "token_count": 37,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_05",
+          "status": 200,
+          "total_latency_ms": 28.42,
+          "model_latency_ms": 28.35,
+          "token_count": 27,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_06",
+          "status": 200,
+          "total_latency_ms": 32.34,
+          "model_latency_ms": 32.26,
+          "token_count": 45,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_07",
+          "status": 200,
+          "total_latency_ms": 26.89,
+          "model_latency_ms": 26.82,
+          "token_count": 31,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_08",
+          "status": 200,
+          "total_latency_ms": 30.51,
+          "model_latency_ms": 30.44,
+          "token_count": 35,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_09",
+          "status": 200,
+          "total_latency_ms": 26.01,
+          "model_latency_ms": 25.94,
+          "token_count": 30,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c1_10",
+          "status": 200,
+          "total_latency_ms": 25.8,
+          "model_latency_ms": 25.73,
+          "token_count": 30,
+          "passed": true
+        }
+      ]
+    },
+    "c2": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t1_6519cc_c2_01",
+          "token_count": 16,
+          "estimated_cost_usd": 2e-06,
+          "expected_cost_usd": 2e-06,
+          "model_latency_ms": 19.07,
+          "style_latency_ms": 0.02,
+          "total_latency_ms": 19.1,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_02",
+          "token_count": 36,
+          "estimated_cost_usd": 5e-06,
+          "expected_cost_usd": 5e-06,
+          "model_latency_ms": 29.98,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 30.05,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_03",
+          "token_count": 38,
+          "estimated_cost_usd": 6e-06,
+          "expected_cost_usd": 6e-06,
+          "model_latency_ms": 31.11,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 31.18,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_04",
+          "token_count": 74,
+          "estimated_cost_usd": 1.1e-05,
+          "expected_cost_usd": 1.1e-05,
+          "model_latency_ms": 42.59,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 42.68,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_05",
+          "token_count": 66,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 40.87,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 40.96,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_06",
+          "token_count": 64,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 37.76,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 37.85,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_07",
+          "token_count": 63,
+          "estimated_cost_usd": 9e-06,
+          "expected_cost_usd": 9e-06,
+          "model_latency_ms": 40.65,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 40.75,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_08",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 108.38,
+          "style_latency_ms": 0.18,
+          "total_latency_ms": 108.57,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_09",
+          "token_count": 135,
+          "estimated_cost_usd": 2e-05,
+          "expected_cost_usd": 2e-05,
+          "model_latency_ms": 78.75,
+          "style_latency_ms": 0.17,
+          "total_latency_ms": 78.92,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c2_10",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 73.63,
+          "style_latency_ms": 0.13,
+          "total_latency_ms": 73.77,
+          "log_matched": true,
+          "passed": true
+        }
+      ]
+    },
+    "c3": {
+      "score": "15/15",
+      "passed": true,
+      "sample_entries": [
+        {
+          "timestamp": "2026-11-16T03:05:30+00:00",
+          "content_id": "c_5477bc52de06",
+          "creator_id": "after_t1_6519cc_c3_ok_01",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.7658,
+          "style_score": 0.5666,
+          "combined_score": 0.6961,
+          "status": "decided",
+          "model_latency_ms": 35.27,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 35.36,
+          "token_count": 38,
+          "tokens_per_sec": 1074.66,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:30+00:00",
+          "content_id": "c_68b2a017fcc1",
+          "creator_id": "after_t1_6519cc_c3_ok_02",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.5148,
+          "style_score": 0.4599,
+          "combined_score": 0.4956,
+          "status": "decided",
+          "model_latency_ms": 41.0,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 41.1,
+          "token_count": 28,
+          "tokens_per_sec": 681.27,
+          "estimated_cost_usd": 4e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:30+00:00",
+          "content_id": "c_f4fd436cece1",
+          "creator_id": "after_t1_6519cc_c3_ok_03",
+          "guess": "human",
+          "label": "We think this was written by a person.",
+          "model_score": 0.1039,
+          "style_score": 0.4007,
+          "combined_score": 0.2078,
+          "status": "decided",
+          "model_latency_ms": 46.5,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 46.59,
+          "token_count": 37,
+          "tokens_per_sec": 794.16,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:30+00:00",
+          "creator_id": "after_t1_6519cc_c3_bad_01",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "timestamp": "2026-11-16T03:05:30+00:00",
+          "creator_id": "after_t1_6519cc_c3_bad_02",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "c4": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t1_6519cc_c4_empty",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:30+00:00",
+            "creator_id": "after_t1_6519cc_c4_empty",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c4_ws",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:30+00:00",
+            "creator_id": "after_t1_6519cc_c4_ws",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c4_short",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:30+00:00",
+            "creator_id": "after_t1_6519cc_c4_short",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "Text is too short to score — a few sentences at least.",
+            "total_latency_ms": 0.09,
+            "token_count": 1,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c4_missing",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:30+00:00",
+            "creator_id": "after_t1_6519cc_c4_missing",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t1_6519cc_c4_int",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:30+00:00",
+            "creator_id": "after_t1_6519cc_c4_int",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        }
+      ]
+    },
+    "c5": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "case": "json_array",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Request body must be a JSON object."
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed_json",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Request body must be a JSON object."
+          },
+          "passed": true
+        },
+        {
+          "case": "empty_body",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Request body must be a JSON object."
+          },
+          "passed": true
+        },
+        {
+          "case": "json_integer",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Request body must be a JSON object."
+          },
+          "passed": true
+        },
+        {
+          "case": "oversized_60k",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Text exceeds maximum allowed length of 50,000 characters."
+          },
+          "passed": true
+        }
+      ]
+    }
+  },
+  {
+    "trial": 2,
+    "timestamp": "2026-11-16T03:05:32+00:00",
+    "c1": {
+      "score": "8/10",
+      "passed": false,
+      "records": [
+        {
+          "creator_id": "after_t2_472154_c1_01",
+          "status": 200,
+          "total_latency_ms": 40.1,
+          "model_latency_ms": 40.0,
+          "token_count": 36,
+          "passed": false
+        },
+        {
+          "creator_id": "after_t2_472154_c1_02",
+          "status": 200,
+          "total_latency_ms": 37.8,
+          "model_latency_ms": 37.72,
+          "token_count": 38,
+          "passed": false
+        },
+        {
+          "creator_id": "after_t2_472154_c1_03",
+          "status": 200,
+          "total_latency_ms": 31.09,
+          "model_latency_ms": 31.0,
+          "token_count": 28,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_04",
+          "status": 200,
+          "total_latency_ms": 32.65,
+          "model_latency_ms": 32.57,
+          "token_count": 37,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_05",
+          "status": 200,
+          "total_latency_ms": 28.18,
+          "model_latency_ms": 28.1,
+          "token_count": 27,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_06",
+          "status": 200,
+          "total_latency_ms": 34.84,
+          "model_latency_ms": 34.75,
+          "token_count": 45,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_07",
+          "status": 200,
+          "total_latency_ms": 26.87,
+          "model_latency_ms": 26.79,
+          "token_count": 31,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_08",
+          "status": 200,
+          "total_latency_ms": 31.03,
+          "model_latency_ms": 30.96,
+          "token_count": 35,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_09",
+          "status": 200,
+          "total_latency_ms": 26.53,
+          "model_latency_ms": 26.45,
+          "token_count": 30,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c1_10",
+          "status": 200,
+          "total_latency_ms": 27.66,
+          "model_latency_ms": 27.58,
+          "token_count": 30,
+          "passed": true
+        }
+      ]
+    },
+    "c2": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t2_472154_c2_01",
+          "token_count": 16,
+          "estimated_cost_usd": 2e-06,
+          "expected_cost_usd": 2e-06,
+          "model_latency_ms": 19.13,
+          "style_latency_ms": 0.02,
+          "total_latency_ms": 19.16,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_02",
+          "token_count": 36,
+          "estimated_cost_usd": 5e-06,
+          "expected_cost_usd": 5e-06,
+          "model_latency_ms": 31.58,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 31.66,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_03",
+          "token_count": 38,
+          "estimated_cost_usd": 6e-06,
+          "expected_cost_usd": 6e-06,
+          "model_latency_ms": 33.22,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 33.31,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_04",
+          "token_count": 74,
+          "estimated_cost_usd": 1.1e-05,
+          "expected_cost_usd": 1.1e-05,
+          "model_latency_ms": 51.42,
+          "style_latency_ms": 0.11,
+          "total_latency_ms": 51.53,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_05",
+          "token_count": 66,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 52.05,
+          "style_latency_ms": 0.1,
+          "total_latency_ms": 52.15,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_06",
+          "token_count": 64,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 44.5,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 44.6,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_07",
+          "token_count": 63,
+          "estimated_cost_usd": 9e-06,
+          "expected_cost_usd": 9e-06,
+          "model_latency_ms": 42.22,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 42.31,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_08",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 66.9,
+          "style_latency_ms": 0.13,
+          "total_latency_ms": 67.04,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_09",
+          "token_count": 135,
+          "estimated_cost_usd": 2e-05,
+          "expected_cost_usd": 2e-05,
+          "model_latency_ms": 64.41,
+          "style_latency_ms": 0.15,
+          "total_latency_ms": 64.57,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c2_10",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 65.22,
+          "style_latency_ms": 0.14,
+          "total_latency_ms": 65.37,
+          "log_matched": true,
+          "passed": true
+        }
+      ]
+    },
+    "c3": {
+      "score": "15/15",
+      "passed": true,
+      "sample_entries": [
+        {
+          "timestamp": "2026-11-16T03:05:32+00:00",
+          "content_id": "c_9f1b12186c4a",
+          "creator_id": "after_t2_472154_c3_ok_01",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.7658,
+          "style_score": 0.5666,
+          "combined_score": 0.6961,
+          "status": "decided",
+          "model_latency_ms": 33.41,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 33.48,
+          "token_count": 38,
+          "tokens_per_sec": 1135.01,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:32+00:00",
+          "content_id": "c_b235b8d1d48f",
+          "creator_id": "after_t2_472154_c3_ok_02",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.5148,
+          "style_score": 0.4599,
+          "combined_score": 0.4956,
+          "status": "decided",
+          "model_latency_ms": 26.95,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 27.02,
+          "token_count": 28,
+          "tokens_per_sec": 1036.27,
+          "estimated_cost_usd": 4e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:32+00:00",
+          "content_id": "c_09422a9ca735",
+          "creator_id": "after_t2_472154_c3_ok_03",
+          "guess": "human",
+          "label": "We think this was written by a person.",
+          "model_score": 0.1039,
+          "style_score": 0.4007,
+          "combined_score": 0.2078,
+          "status": "decided",
+          "model_latency_ms": 32.41,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 32.49,
+          "token_count": 37,
+          "tokens_per_sec": 1138.81,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:32+00:00",
+          "creator_id": "after_t2_472154_c3_bad_01",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "timestamp": "2026-11-16T03:05:32+00:00",
+          "creator_id": "after_t2_472154_c3_bad_02",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "c4": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t2_472154_c4_empty",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:32+00:00",
+            "creator_id": "after_t2_472154_c4_empty",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c4_ws",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:32+00:00",
+            "creator_id": "after_t2_472154_c4_ws",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c4_short",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:32+00:00",
+            "creator_id": "after_t2_472154_c4_short",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "Text is too short to score — a few sentences at least.",
+            "total_latency_ms": 0.07,
+            "token_count": 1,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c4_missing",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:32+00:00",
+            "creator_id": "after_t2_472154_c4_missing",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t2_472154_c4_int",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:32+00:00",
+            "creator_id": "after_t2_472154_c4_int",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        }
+      ]
+    },
+    "c5": {
+      "score": "2/5",
+      "passed": false,
+      "records": [
+        {
+          "case": "json_array",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Request body must be a JSON object."
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed_json",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "empty_body",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "json_integer",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "oversized_60k",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Text exceeds maximum allowed length of 50,000 characters."
+          },
+          "passed": true
+        }
+      ]
+    }
+  },
+  {
+    "trial": 3,
+    "timestamp": "2026-11-16T03:05:34+00:00",
+    "c1": {
+      "score": "8/10",
+      "passed": false,
+      "records": [
+        {
+          "creator_id": "after_t3_a4f366_c1_01",
+          "status": 200,
+          "total_latency_ms": 33.33,
+          "model_latency_ms": 33.25,
+          "token_count": 36,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_02",
+          "status": 200,
+          "total_latency_ms": 31.61,
+          "model_latency_ms": 31.54,
+          "token_count": 38,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_03",
+          "status": 200,
+          "total_latency_ms": 29.37,
+          "model_latency_ms": 29.29,
+          "token_count": 28,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_04",
+          "status": 200,
+          "total_latency_ms": 42.42,
+          "model_latency_ms": 42.34,
+          "token_count": 37,
+          "passed": false
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_05",
+          "status": 200,
+          "total_latency_ms": 34.49,
+          "model_latency_ms": 34.4,
+          "token_count": 27,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_06",
+          "status": 200,
+          "total_latency_ms": 36.64,
+          "model_latency_ms": 36.57,
+          "token_count": 45,
+          "passed": false
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_07",
+          "status": 200,
+          "total_latency_ms": 27.27,
+          "model_latency_ms": 27.19,
+          "token_count": 31,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_08",
+          "status": 200,
+          "total_latency_ms": 33.61,
+          "model_latency_ms": 33.53,
+          "token_count": 35,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_09",
+          "status": 200,
+          "total_latency_ms": 27.43,
+          "model_latency_ms": 27.35,
+          "token_count": 30,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c1_10",
+          "status": 200,
+          "total_latency_ms": 27.37,
+          "model_latency_ms": 27.3,
+          "token_count": 30,
+          "passed": true
+        }
+      ]
+    },
+    "c2": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t3_a4f366_c2_01",
+          "token_count": 16,
+          "estimated_cost_usd": 2e-06,
+          "expected_cost_usd": 2e-06,
+          "model_latency_ms": 19.41,
+          "style_latency_ms": 0.02,
+          "total_latency_ms": 19.43,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_02",
+          "token_count": 36,
+          "estimated_cost_usd": 5e-06,
+          "expected_cost_usd": 5e-06,
+          "model_latency_ms": 31.76,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 31.83,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_03",
+          "token_count": 38,
+          "estimated_cost_usd": 6e-06,
+          "expected_cost_usd": 6e-06,
+          "model_latency_ms": 31.8,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 31.87,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_04",
+          "token_count": 74,
+          "estimated_cost_usd": 1.1e-05,
+          "expected_cost_usd": 1.1e-05,
+          "model_latency_ms": 43.53,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 43.62,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_05",
+          "token_count": 66,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 42.32,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 42.41,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_06",
+          "token_count": 64,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 37.67,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 37.76,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_07",
+          "token_count": 63,
+          "estimated_cost_usd": 9e-06,
+          "expected_cost_usd": 9e-06,
+          "model_latency_ms": 38.69,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 38.78,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_08",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 67.87,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 68.0,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_09",
+          "token_count": 135,
+          "estimated_cost_usd": 2e-05,
+          "expected_cost_usd": 2e-05,
+          "model_latency_ms": 64.73,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 64.85,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c2_10",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 68.14,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 68.26,
+          "log_matched": true,
+          "passed": true
+        }
+      ]
+    },
+    "c3": {
+      "score": "15/15",
+      "passed": true,
+      "sample_entries": [
+        {
+          "timestamp": "2026-11-16T03:05:33+00:00",
+          "content_id": "c_993c433b65bf",
+          "creator_id": "after_t3_a4f366_c3_ok_01",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.7658,
+          "style_score": 0.5666,
+          "combined_score": 0.6961,
+          "status": "decided",
+          "model_latency_ms": 32.18,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 32.25,
+          "token_count": 38,
+          "tokens_per_sec": 1178.29,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:33+00:00",
+          "content_id": "c_fd38895d879d",
+          "creator_id": "after_t3_a4f366_c3_ok_02",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.5148,
+          "style_score": 0.4599,
+          "combined_score": 0.4956,
+          "status": "decided",
+          "model_latency_ms": 26.42,
+          "style_latency_ms": 0.06,
+          "total_latency_ms": 26.48,
+          "token_count": 28,
+          "tokens_per_sec": 1057.4,
+          "estimated_cost_usd": 4e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:33+00:00",
+          "content_id": "c_02567cbcc649",
+          "creator_id": "after_t3_a4f366_c3_ok_03",
+          "guess": "human",
+          "label": "We think this was written by a person.",
+          "model_score": 0.1039,
+          "style_score": 0.4007,
+          "combined_score": 0.2078,
+          "status": "decided",
+          "model_latency_ms": 32.54,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 32.61,
+          "token_count": 37,
+          "tokens_per_sec": 1134.62,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T03:05:34+00:00",
+          "creator_id": "after_t3_a4f366_c3_bad_01",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "timestamp": "2026-11-16T03:05:34+00:00",
+          "creator_id": "after_t3_a4f366_c3_bad_02",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "c4": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "after_t3_a4f366_c4_empty",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:34+00:00",
+            "creator_id": "after_t3_a4f366_c4_empty",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c4_ws",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:34+00:00",
+            "creator_id": "after_t3_a4f366_c4_ws",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c4_short",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:34+00:00",
+            "creator_id": "after_t3_a4f366_c4_short",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "Text is too short to score — a few sentences at least.",
+            "total_latency_ms": 0.06,
+            "token_count": 1,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c4_missing",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:34+00:00",
+            "creator_id": "after_t3_a4f366_c4_missing",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "after_t3_a4f366_c4_int",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T03:05:34+00:00",
+            "creator_id": "after_t3_a4f366_c4_int",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        }
+      ]
+    },
+    "c5": {
+      "score": "1/5",
+      "passed": false,
+      "records": [
+        {
+          "case": "json_array",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "malformed_json",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "empty_body",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "json_integer",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "oversized_60k",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Text exceeds maximum allowed length of 50,000 characters."
+          },
+          "passed": true
+        }
+      ]
+    }
+  }
+]

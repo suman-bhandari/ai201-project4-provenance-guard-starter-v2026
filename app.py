@@ -207,7 +207,21 @@ def submit():
     """
     req_start = time.perf_counter()
 
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        total_latency_ms = round((time.perf_counter() - req_start) * 1000.0, 2)
+        audit.log_rejection(
+            creator_id="unknown",
+            reason="invalid_json_object",
+            total_latency_ms=total_latency_ms,
+            token_count=0,
+            estimated_cost_usd=0.0,
+        )
+        return jsonify({
+            "error": "bad_request",
+            "message": "Request body must be a JSON object."
+        }), 400
+
     text = payload.get("text")
     creator_id = payload.get("creator_id", "unknown")
 
@@ -223,8 +237,23 @@ def submit():
             estimated_cost_usd=0.0,
         )
         return jsonify({
-            "error": "bad_request", 
+            "error": "bad_request",
             "message": "Send JSON with a non-empty 'text'."
+        }), 400
+
+    # 2. Oversized text rejection (> 50,000 characters)
+    if len(text) > 50000:
+        total_latency_ms = round((time.perf_counter() - req_start) * 1000.0, 2)
+        audit.log_rejection(
+            creator_id=creator_id,
+            reason="text_exceeds_max_length",
+            total_latency_ms=total_latency_ms,
+            token_count=0,
+            estimated_cost_usd=0.0,
+        )
+        return jsonify({
+            "error": "bad_request",
+            "message": "Text exceeds maximum allowed length of 50,000 characters."
         }), 400
 
     # 2. Signal 1 ValueError (e.g., text too short / below token window)
