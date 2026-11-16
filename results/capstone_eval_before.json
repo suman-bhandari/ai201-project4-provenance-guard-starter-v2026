@@ -1,0 +1,1290 @@
+[
+  {
+    "trial": 1,
+    "timestamp": "2026-11-16T02:02:42+00:00",
+    "c1": {
+      "score": "6/10",
+      "passed": false,
+      "records": [
+        {
+          "creator_id": "before_t1_a9c5d8_c1_01",
+          "status": 200,
+          "total_latency_ms": 47.65,
+          "model_latency_ms": 47.51,
+          "token_count": 36,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_02",
+          "status": 200,
+          "total_latency_ms": 35.55,
+          "model_latency_ms": 35.46,
+          "token_count": 38,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_03",
+          "status": 200,
+          "total_latency_ms": 28.57,
+          "model_latency_ms": 28.49,
+          "token_count": 28,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_04",
+          "status": 200,
+          "total_latency_ms": 36.51,
+          "model_latency_ms": 36.43,
+          "token_count": 37,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_05",
+          "status": 200,
+          "total_latency_ms": 29.89,
+          "model_latency_ms": 29.8,
+          "token_count": 27,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_06",
+          "status": 200,
+          "total_latency_ms": 36.46,
+          "model_latency_ms": 36.38,
+          "token_count": 45,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_07",
+          "status": 200,
+          "total_latency_ms": 29.15,
+          "model_latency_ms": 29.07,
+          "token_count": 31,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_08",
+          "status": 200,
+          "total_latency_ms": 33.55,
+          "model_latency_ms": 33.47,
+          "token_count": 35,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_09",
+          "status": 200,
+          "total_latency_ms": 29.91,
+          "model_latency_ms": 29.84,
+          "token_count": 30,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c1_10",
+          "status": 200,
+          "total_latency_ms": 29.71,
+          "model_latency_ms": 29.63,
+          "token_count": 30,
+          "passed": true
+        }
+      ]
+    },
+    "c2": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t1_a9c5d8_c2_01",
+          "token_count": 16,
+          "estimated_cost_usd": 2e-06,
+          "expected_cost_usd": 2e-06,
+          "model_latency_ms": 19.82,
+          "style_latency_ms": 0.02,
+          "total_latency_ms": 19.85,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_02",
+          "token_count": 36,
+          "estimated_cost_usd": 5e-06,
+          "expected_cost_usd": 5e-06,
+          "model_latency_ms": 33.55,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 33.64,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_03",
+          "token_count": 38,
+          "estimated_cost_usd": 6e-06,
+          "expected_cost_usd": 6e-06,
+          "model_latency_ms": 37.12,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 37.21,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_04",
+          "token_count": 74,
+          "estimated_cost_usd": 1.1e-05,
+          "expected_cost_usd": 1.1e-05,
+          "model_latency_ms": 45.26,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 45.36,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_05",
+          "token_count": 66,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 43.27,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 43.36,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_06",
+          "token_count": 64,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 39.31,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 39.41,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_07",
+          "token_count": 63,
+          "estimated_cost_usd": 9e-06,
+          "expected_cost_usd": 9e-06,
+          "model_latency_ms": 39.24,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 39.33,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_08",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 74.73,
+          "style_latency_ms": 0.17,
+          "total_latency_ms": 74.91,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_09",
+          "token_count": 135,
+          "estimated_cost_usd": 2e-05,
+          "expected_cost_usd": 2e-05,
+          "model_latency_ms": 68.85,
+          "style_latency_ms": 0.15,
+          "total_latency_ms": 69.0,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c2_10",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 73.96,
+          "style_latency_ms": 0.14,
+          "total_latency_ms": 74.1,
+          "log_matched": true,
+          "passed": true
+        }
+      ]
+    },
+    "c3": {
+      "score": "15/15",
+      "passed": true,
+      "sample_entries": [
+        {
+          "timestamp": "2026-11-16T02:02:42+00:00",
+          "content_id": "c_155fb09453d8",
+          "creator_id": "before_t1_a9c5d8_c3_ok_01",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.7658,
+          "style_score": 0.5666,
+          "combined_score": 0.6961,
+          "status": "decided",
+          "model_latency_ms": 34.62,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 34.7,
+          "token_count": 38,
+          "tokens_per_sec": 1095.1,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:42+00:00",
+          "content_id": "c_b3f509a33de6",
+          "creator_id": "before_t1_a9c5d8_c3_ok_02",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.5148,
+          "style_score": 0.4599,
+          "combined_score": 0.4956,
+          "status": "decided",
+          "model_latency_ms": 26.35,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 26.43,
+          "token_count": 28,
+          "tokens_per_sec": 1059.4,
+          "estimated_cost_usd": 4e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:42+00:00",
+          "content_id": "c_26d44abb8b38",
+          "creator_id": "before_t1_a9c5d8_c3_ok_03",
+          "guess": "human",
+          "label": "We think this was written by a person.",
+          "model_score": 0.1039,
+          "style_score": 0.4007,
+          "combined_score": 0.2078,
+          "status": "decided",
+          "model_latency_ms": 30.35,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 30.43,
+          "token_count": 37,
+          "tokens_per_sec": 1215.91,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:42+00:00",
+          "creator_id": "before_t1_a9c5d8_c3_bad_01",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "timestamp": "2026-11-16T02:02:42+00:00",
+          "creator_id": "before_t1_a9c5d8_c3_bad_02",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "c4": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t1_a9c5d8_c4_empty",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:42+00:00",
+            "creator_id": "before_t1_a9c5d8_c4_empty",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c4_ws",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:42+00:00",
+            "creator_id": "before_t1_a9c5d8_c4_ws",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c4_short",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:42+00:00",
+            "creator_id": "before_t1_a9c5d8_c4_short",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "Text is too short to score — a few sentences at least.",
+            "total_latency_ms": 0.06,
+            "token_count": 1,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c4_missing",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:42+00:00",
+            "creator_id": "before_t1_a9c5d8_c4_missing",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t1_a9c5d8_c4_int",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:42+00:00",
+            "creator_id": "before_t1_a9c5d8_c4_int",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        }
+      ]
+    },
+    "c5": {
+      "score": "3/5",
+      "passed": false,
+      "records": [
+        {
+          "case": "json_array",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Send JSON with a non-empty 'text'."
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed_json",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Send JSON with a non-empty 'text'."
+          },
+          "passed": true
+        },
+        {
+          "case": "empty_body",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Send JSON with a non-empty 'text'."
+          },
+          "passed": true
+        },
+        {
+          "case": "json_integer",
+          "status": 500,
+          "response_preview": "<!doctype html>\n<html lang=en>\n  <head>\n    <title>AttributeError: &#39;int&#39; object has no attribute &#39;get&#39;\n // Werkzeug Debugger",
+          "passed": false
+        },
+        {
+          "case": "oversized_60k",
+          "status": 200,
+          "response_preview": {
+            "confidence": 0.9984,
+            "content_id": "c_29388e881f7b",
+            "creator_id": "before_t1_a9c5d8_c5_huge",
+            "guess": "ai",
+            "label": "This text closely follows statistical patterns typical of automated writing.",
+            "model_score": 0.9975,
+            "style_score": 1.0,
+            "telemetry": {
+              "estimated_cost_usd": 0.000154,
+              "model_latency_ms": 192.57,
+              "style_latency_ms": 3.2,
+              "token_count": 1024,
+              "tokens_per_sec": 5230.36,
+              "total_latency_ms": 195.78
+            }
+          },
+          "passed": false
+        }
+      ]
+    }
+  },
+  {
+    "trial": 2,
+    "timestamp": "2026-11-16T02:02:44+00:00",
+    "c1": {
+      "score": "8/10",
+      "passed": false,
+      "records": [
+        {
+          "creator_id": "before_t2_dd0eeb_c1_01",
+          "status": 200,
+          "total_latency_ms": 42.17,
+          "model_latency_ms": 42.09,
+          "token_count": 36,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_02",
+          "status": 200,
+          "total_latency_ms": 33.97,
+          "model_latency_ms": 33.89,
+          "token_count": 38,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_03",
+          "status": 200,
+          "total_latency_ms": 30.48,
+          "model_latency_ms": 30.4,
+          "token_count": 28,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_04",
+          "status": 200,
+          "total_latency_ms": 36.95,
+          "model_latency_ms": 36.87,
+          "token_count": 37,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_05",
+          "status": 200,
+          "total_latency_ms": 26.78,
+          "model_latency_ms": 26.71,
+          "token_count": 27,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_06",
+          "status": 200,
+          "total_latency_ms": 33.59,
+          "model_latency_ms": 33.51,
+          "token_count": 45,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_07",
+          "status": 200,
+          "total_latency_ms": 26.23,
+          "model_latency_ms": 26.16,
+          "token_count": 31,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_08",
+          "status": 200,
+          "total_latency_ms": 30.85,
+          "model_latency_ms": 30.78,
+          "token_count": 35,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_09",
+          "status": 200,
+          "total_latency_ms": 26.91,
+          "model_latency_ms": 26.84,
+          "token_count": 30,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c1_10",
+          "status": 200,
+          "total_latency_ms": 26.28,
+          "model_latency_ms": 26.21,
+          "token_count": 30,
+          "passed": true
+        }
+      ]
+    },
+    "c2": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t2_dd0eeb_c2_01",
+          "token_count": 16,
+          "estimated_cost_usd": 2e-06,
+          "expected_cost_usd": 2e-06,
+          "model_latency_ms": 19.66,
+          "style_latency_ms": 0.03,
+          "total_latency_ms": 19.69,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_02",
+          "token_count": 36,
+          "estimated_cost_usd": 5e-06,
+          "expected_cost_usd": 5e-06,
+          "model_latency_ms": 30.73,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 30.81,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_03",
+          "token_count": 38,
+          "estimated_cost_usd": 6e-06,
+          "expected_cost_usd": 6e-06,
+          "model_latency_ms": 31.59,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 31.66,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_04",
+          "token_count": 74,
+          "estimated_cost_usd": 1.1e-05,
+          "expected_cost_usd": 1.1e-05,
+          "model_latency_ms": 43.83,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 43.93,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_05",
+          "token_count": 66,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 43.54,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 43.64,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_06",
+          "token_count": 64,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 37.65,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 37.74,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_07",
+          "token_count": 63,
+          "estimated_cost_usd": 9e-06,
+          "expected_cost_usd": 9e-06,
+          "model_latency_ms": 38.79,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 38.88,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_08",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 66.9,
+          "style_latency_ms": 0.13,
+          "total_latency_ms": 67.03,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_09",
+          "token_count": 135,
+          "estimated_cost_usd": 2e-05,
+          "expected_cost_usd": 2e-05,
+          "model_latency_ms": 66.28,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 66.41,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c2_10",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 67.57,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 67.7,
+          "log_matched": true,
+          "passed": true
+        }
+      ]
+    },
+    "c3": {
+      "score": "15/15",
+      "passed": true,
+      "sample_entries": [
+        {
+          "timestamp": "2026-11-16T02:02:44+00:00",
+          "content_id": "c_1fdaa3a59069",
+          "creator_id": "before_t2_dd0eeb_c3_ok_01",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.7658,
+          "style_score": 0.5666,
+          "combined_score": 0.6961,
+          "status": "decided",
+          "model_latency_ms": 32.0,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 32.08,
+          "token_count": 38,
+          "tokens_per_sec": 1184.54,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:44+00:00",
+          "content_id": "c_31a31b8e5fe5",
+          "creator_id": "before_t2_dd0eeb_c3_ok_02",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.5148,
+          "style_score": 0.4599,
+          "combined_score": 0.4956,
+          "status": "decided",
+          "model_latency_ms": 26.61,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 26.68,
+          "token_count": 28,
+          "tokens_per_sec": 1049.48,
+          "estimated_cost_usd": 4e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:44+00:00",
+          "content_id": "c_2615b63392ce",
+          "creator_id": "before_t2_dd0eeb_c3_ok_03",
+          "guess": "human",
+          "label": "We think this was written by a person.",
+          "model_score": 0.1039,
+          "style_score": 0.4007,
+          "combined_score": 0.2078,
+          "status": "decided",
+          "model_latency_ms": 33.74,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 33.81,
+          "token_count": 37,
+          "tokens_per_sec": 1094.35,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:44+00:00",
+          "creator_id": "before_t2_dd0eeb_c3_bad_01",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "timestamp": "2026-11-16T02:02:44+00:00",
+          "creator_id": "before_t2_dd0eeb_c3_bad_02",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "c4": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t2_dd0eeb_c4_empty",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:44+00:00",
+            "creator_id": "before_t2_dd0eeb_c4_empty",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c4_ws",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:44+00:00",
+            "creator_id": "before_t2_dd0eeb_c4_ws",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c4_short",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:44+00:00",
+            "creator_id": "before_t2_dd0eeb_c4_short",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "Text is too short to score — a few sentences at least.",
+            "total_latency_ms": 0.06,
+            "token_count": 1,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c4_missing",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:44+00:00",
+            "creator_id": "before_t2_dd0eeb_c4_missing",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t2_dd0eeb_c4_int",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:44+00:00",
+            "creator_id": "before_t2_dd0eeb_c4_int",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        }
+      ]
+    },
+    "c5": {
+      "score": "1/5",
+      "passed": false,
+      "records": [
+        {
+          "case": "json_array",
+          "status": 400,
+          "response_preview": {
+            "error": "bad_request",
+            "message": "Send JSON with a non-empty 'text'."
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed_json",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "empty_body",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "json_integer",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "oversized_60k",
+          "status": 200,
+          "response_preview": {
+            "confidence": 0.9984,
+            "content_id": "c_c21c7855ea1c",
+            "creator_id": "before_t2_dd0eeb_c5_huge",
+            "guess": "ai",
+            "label": "This text closely follows statistical patterns typical of automated writing.",
+            "model_score": 0.9975,
+            "style_score": 1.0,
+            "telemetry": {
+              "estimated_cost_usd": 0.000154,
+              "model_latency_ms": 162.24,
+              "style_latency_ms": 3.23,
+              "token_count": 1024,
+              "tokens_per_sec": 6188.06,
+              "total_latency_ms": 165.48
+            }
+          },
+          "passed": false
+        }
+      ]
+    }
+  },
+  {
+    "trial": 3,
+    "timestamp": "2026-11-16T02:02:46+00:00",
+    "c1": {
+      "score": "9/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t3_92c802_c1_01",
+          "status": 200,
+          "total_latency_ms": 32.88,
+          "model_latency_ms": 32.79,
+          "token_count": 36,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_02",
+          "status": 200,
+          "total_latency_ms": 33.04,
+          "model_latency_ms": 32.96,
+          "token_count": 38,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_03",
+          "status": 200,
+          "total_latency_ms": 28.65,
+          "model_latency_ms": 28.58,
+          "token_count": 28,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_04",
+          "status": 200,
+          "total_latency_ms": 31.2,
+          "model_latency_ms": 31.13,
+          "token_count": 37,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_05",
+          "status": 200,
+          "total_latency_ms": 26.71,
+          "model_latency_ms": 26.63,
+          "token_count": 27,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_06",
+          "status": 200,
+          "total_latency_ms": 33.68,
+          "model_latency_ms": 33.6,
+          "token_count": 45,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_07",
+          "status": 200,
+          "total_latency_ms": 47.03,
+          "model_latency_ms": 46.96,
+          "token_count": 31,
+          "passed": false
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_08",
+          "status": 200,
+          "total_latency_ms": 31.86,
+          "model_latency_ms": 31.78,
+          "token_count": 35,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_09",
+          "status": 200,
+          "total_latency_ms": 26.39,
+          "model_latency_ms": 26.33,
+          "token_count": 30,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c1_10",
+          "status": 200,
+          "total_latency_ms": 27.49,
+          "model_latency_ms": 27.39,
+          "token_count": 30,
+          "passed": true
+        }
+      ]
+    },
+    "c2": {
+      "score": "10/10",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t3_92c802_c2_01",
+          "token_count": 16,
+          "estimated_cost_usd": 2e-06,
+          "expected_cost_usd": 2e-06,
+          "model_latency_ms": 19.52,
+          "style_latency_ms": 0.02,
+          "total_latency_ms": 19.55,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_02",
+          "token_count": 36,
+          "estimated_cost_usd": 5e-06,
+          "expected_cost_usd": 5e-06,
+          "model_latency_ms": 31.09,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 31.17,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_03",
+          "token_count": 38,
+          "estimated_cost_usd": 6e-06,
+          "expected_cost_usd": 6e-06,
+          "model_latency_ms": 31.43,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 31.51,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_04",
+          "token_count": 74,
+          "estimated_cost_usd": 1.1e-05,
+          "expected_cost_usd": 1.1e-05,
+          "model_latency_ms": 42.89,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 42.98,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_05",
+          "token_count": 66,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 41.67,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 41.76,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_06",
+          "token_count": 64,
+          "estimated_cost_usd": 1e-05,
+          "expected_cost_usd": 1e-05,
+          "model_latency_ms": 37.27,
+          "style_latency_ms": 0.09,
+          "total_latency_ms": 37.36,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_07",
+          "token_count": 63,
+          "estimated_cost_usd": 9e-06,
+          "expected_cost_usd": 9e-06,
+          "model_latency_ms": 38.35,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 38.44,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_08",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 64.91,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 65.04,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_09",
+          "token_count": 135,
+          "estimated_cost_usd": 2e-05,
+          "expected_cost_usd": 2e-05,
+          "model_latency_ms": 64.76,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 64.89,
+          "log_matched": true,
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c2_10",
+          "token_count": 138,
+          "estimated_cost_usd": 2.1e-05,
+          "expected_cost_usd": 2.1e-05,
+          "model_latency_ms": 69.14,
+          "style_latency_ms": 0.12,
+          "total_latency_ms": 69.27,
+          "log_matched": true,
+          "passed": true
+        }
+      ]
+    },
+    "c3": {
+      "score": "15/15",
+      "passed": true,
+      "sample_entries": [
+        {
+          "timestamp": "2026-11-16T02:02:46+00:00",
+          "content_id": "c_5c83f8f0aea8",
+          "creator_id": "before_t3_92c802_c3_ok_01",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.7658,
+          "style_score": 0.5666,
+          "combined_score": 0.6961,
+          "status": "decided",
+          "model_latency_ms": 31.33,
+          "style_latency_ms": 0.08,
+          "total_latency_ms": 31.41,
+          "token_count": 38,
+          "tokens_per_sec": 1209.81,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:46+00:00",
+          "content_id": "c_cd382b4cad8b",
+          "creator_id": "before_t3_92c802_c3_ok_02",
+          "guess": "unsure",
+          "label": "We can't tell for sure who wrote this — it shares characteristics of both human and automated writing.",
+          "model_score": 0.5148,
+          "style_score": 0.4599,
+          "combined_score": 0.4956,
+          "status": "decided",
+          "model_latency_ms": 26.45,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 26.52,
+          "token_count": 28,
+          "tokens_per_sec": 1055.81,
+          "estimated_cost_usd": 4e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:46+00:00",
+          "content_id": "c_91f853256de3",
+          "creator_id": "before_t3_92c802_c3_ok_03",
+          "guess": "human",
+          "label": "We think this was written by a person.",
+          "model_score": 0.1039,
+          "style_score": 0.4007,
+          "combined_score": 0.2078,
+          "status": "decided",
+          "model_latency_ms": 33.52,
+          "style_latency_ms": 0.07,
+          "total_latency_ms": 33.59,
+          "token_count": 37,
+          "tokens_per_sec": 1101.52,
+          "estimated_cost_usd": 6e-06
+        },
+        {
+          "timestamp": "2026-11-16T02:02:46+00:00",
+          "creator_id": "before_t3_92c802_c3_bad_01",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        },
+        {
+          "timestamp": "2026-11-16T02:02:46+00:00",
+          "creator_id": "before_t3_92c802_c3_bad_02",
+          "event": "rejected",
+          "status": "rejected",
+          "reason": "missing_or_empty_text",
+          "total_latency_ms": 0.0,
+          "token_count": 0,
+          "estimated_cost_usd": 0.0
+        }
+      ]
+    },
+    "c4": {
+      "score": "5/5",
+      "passed": true,
+      "records": [
+        {
+          "creator_id": "before_t3_92c802_c4_empty",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:46+00:00",
+            "creator_id": "before_t3_92c802_c4_empty",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c4_ws",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:46+00:00",
+            "creator_id": "before_t3_92c802_c4_ws",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c4_short",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:46+00:00",
+            "creator_id": "before_t3_92c802_c4_short",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "Text is too short to score — a few sentences at least.",
+            "total_latency_ms": 0.09,
+            "token_count": 1,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c4_missing",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:46+00:00",
+            "creator_id": "before_t3_92c802_c4_missing",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        },
+        {
+          "creator_id": "before_t3_92c802_c4_int",
+          "http_status": 400,
+          "log_entry": {
+            "timestamp": "2026-11-16T02:02:46+00:00",
+            "creator_id": "before_t3_92c802_c4_int",
+            "event": "rejected",
+            "status": "rejected",
+            "reason": "missing_or_empty_text",
+            "total_latency_ms": 0.0,
+            "token_count": 0,
+            "estimated_cost_usd": 0.0
+          },
+          "passed": true
+        }
+      ]
+    },
+    "c5": {
+      "score": "0/5",
+      "passed": false,
+      "records": [
+        {
+          "case": "json_array",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "malformed_json",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "empty_body",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "json_integer",
+          "status": 429,
+          "response_preview": {
+            "error": "rate_limited",
+            "limit": "5 per 1 minute",
+            "message": "Too many submissions. Try again shortly."
+          },
+          "passed": false
+        },
+        {
+          "case": "oversized_60k",
+          "status": 200,
+          "response_preview": {
+            "confidence": 0.9984,
+            "content_id": "c_04bcbec7c249",
+            "creator_id": "before_t3_92c802_c5_huge",
+            "guess": "ai",
+            "label": "This text closely follows statistical patterns typical of automated writing.",
+            "model_score": 0.9975,
+            "style_score": 1.0,
+            "telemetry": {
+              "estimated_cost_usd": 0.000154,
+              "model_latency_ms": 167.9,
+              "style_latency_ms": 3.13,
+              "token_count": 1024,
+              "tokens_per_sec": 5986.9,
+              "total_latency_ms": 171.04
+            }
+          },
+          "passed": false
+        }
+      ]
+    }
+  }
+]
